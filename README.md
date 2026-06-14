@@ -29,10 +29,10 @@
 ## Deploy
 
 ### Frontend
-Pendiente
+https://redsocial-frontend-4c2h.onrender.com
 
 ### Backend
-Pendiente
+https://redsocial-backend-fy2b.onrender.com
 
 ---
 
