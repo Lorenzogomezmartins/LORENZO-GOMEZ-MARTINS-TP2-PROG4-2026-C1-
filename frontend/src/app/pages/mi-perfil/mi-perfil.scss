@@ -1,0 +1,42 @@
+.page {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 16px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: white;
+  padding: 34px;
+  border-radius: 26px;
+  text-align: center;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #2563eb;
+}
+
+h1 {
+  margin-bottom: 4px;
+  color: #111827;
+}
+
+.username {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.info {
+  margin-top: 24px;
+  text-align: left;
+  color: #374151;
+}

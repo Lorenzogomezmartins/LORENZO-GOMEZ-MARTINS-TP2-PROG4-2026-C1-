@@ -1,0 +1,83 @@
+<section class="page">
+  <div class="card">
+    <h1>Crear cuenta</h1>
+    <p class="subtitle">Registrate para entrar a la red social.</p>
+
+    <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+      <div class="grid">
+        <label>
+          Nombre
+          <input type="text" formControlName="nombre" />
+          <span *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid">
+            El nombre es obligatorio.
+          </span>
+        </label>
+
+        <label>
+          Apellido
+          <input type="text" formControlName="apellido" />
+          <span *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid">
+            El apellido es obligatorio.
+          </span>
+        </label>
+      </div>
+
+      <label>
+        Correo
+        <input type="email" formControlName="correo" />
+        <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid">
+          Ingresá un correo válido.
+        </span>
+      </label>
+
+      <label>
+        Nombre de usuario
+        <input type="text" formControlName="nombreUsuario" />
+        <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.invalid">
+          El nombre de usuario es obligatorio.
+        </span>
+      </label>
+
+      <label>
+        Contraseña
+        <input type="password" formControlName="password" />
+        <span *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.invalid">
+          Mínimo 8 caracteres, una mayúscula y un número.
+        </span>
+      </label>
+
+      <label>
+        Repetir contraseña
+        <input type="password" formControlName="repetirPassword" />
+      </label>
+
+      <label>
+        Fecha de nacimiento
+        <input type="date" formControlName="fechaNacimiento" />
+      </label>
+
+      <label>
+        Descripción breve
+        <textarea formControlName="descripcion" rows="3"></textarea>
+      </label>
+
+      <label>
+        Imagen de perfil
+        <input type="file" accept="image/*" (change)="seleccionarImagen($event)" />
+      </label>
+
+      <label>
+        Perfil
+        <select formControlName="perfil">
+          <option value="usuario">Usuario</option>
+          <option value="administrador">Administrador</option>
+        </select>
+      </label>
+
+      <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+      <p class="error" *ngIf="error">{{ error }}</p>
+
+      <button type="submit">Registrarme</button>
+    </form>
+  </div>
+</section>

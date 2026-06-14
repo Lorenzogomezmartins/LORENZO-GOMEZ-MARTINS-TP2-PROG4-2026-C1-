@@ -1,0 +1,26 @@
+<section class="page">
+  <div class="card" *ngIf="usuario; else sinUsuario">
+    <img
+      class="avatar"
+      [src]="usuario.imagenPerfil || 'https://placehold.co/160x160?text=Perfil'"
+      alt="Foto de perfil"
+    />
+
+    <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+    <p class="username">@{{ usuario.nombreUsuario }}</p>
+
+    <div class="info">
+      <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+      <p><strong>Fecha de nacimiento:</strong> {{ usuario.fechaNacimiento }}</p>
+      <p><strong>Perfil:</strong> {{ usuario.perfil }}</p>
+      <p><strong>Descripción:</strong> {{ usuario.descripcion }}</p>
+    </div>
+  </div>
+
+  <ng-template #sinUsuario>
+    <div class="card">
+      <h1>No hay usuario logueado</h1>
+      <p>Iniciá sesión para ver tu perfil.</p>
+    </div>
+  </ng-template>
+</section>
