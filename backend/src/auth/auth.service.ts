@@ -13,10 +13,7 @@ import { LoginDto } from './dto/login.dto';
 export class AuthService {
   constructor(private readonly usuariosService: UsuariosService) {}
 
-  async registrar(
-    registroDto: RegistroDto,
-    imagenPerfilUrl: string,
-  ) {
+  async registrar(registroDto: RegistroDto, imagenPerfilUrl: string) {
     const existeCorreo = await this.usuariosService.buscarPorCorreo(
       registroDto.correo,
     );
@@ -47,8 +44,10 @@ export class AuthService {
       activo: true,
     });
 
-    const { password, ...usuarioSinPassword } =
+    const { password: _password, ...usuarioSinPassword } =
       usuarioCreado.toObject();
+
+    void _password;
 
     return {
       mensaje: 'Usuario registrado correctamente',
@@ -78,8 +77,9 @@ export class AuthService {
       throw new UnauthorizedException('Usuario o contraseña incorrectos');
     }
 
-    const { password, ...usuarioSinPassword } =
-    usuario.toObject();
+    const { password: _password, ...usuarioSinPassword } = usuario.toObject();
+
+    void _password;
 
     return {
       mensaje: 'Login correcto',
