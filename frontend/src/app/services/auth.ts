@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://redsocial-backend.onrender.com/auth';
+ private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/auth';
 
   constructor(private http: HttpClient) {}
 
