@@ -5,20 +5,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://redsocial-backend.onrender.com/auth';
+  private apiUrl = 'http://localhost:3000/auth';
 
   constructor(private http: HttpClient) {}
 
-  /*
-    Registro usa FormData porque enviamos texto + archivo.
-  */
   registrar(datos: FormData) {
     return this.http.post(`${this.apiUrl}/registro`, datos);
   }
 
-  /*
-    Login usa JSON normal.
-  */
   login(credenciales: { identificador: string; password: string }) {
     return this.http.post(`${this.apiUrl}/login`, credenciales);
   }

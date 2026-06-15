@@ -1,26 +1,43 @@
-<section class="page">
-  <div class="card" *ngIf="usuario; else sinUsuario">
+<section class="perfil-page" *ngIf="usuarioActual; else sinUsuario">
+  <div class="perfil-card">
     <img
-      class="avatar"
-      [src]="usuario.imagenPerfil || 'https://placehold.co/160x160?text=Perfil'"
+      [src]="usuarioActual.imagenPerfil || 'assets/avatar-default.png'"
       alt="Foto de perfil"
     />
 
-    <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
-    <p class="username">@{{ usuario.nombreUsuario }}</p>
+    <h1>{{ usuarioActual.nombre }} {{ usuarioActual.apellido }}</h1>
+    <p>@{{ usuarioActual.nombreUsuario }}</p>
 
-    <div class="info">
-      <p><strong>Correo:</strong> {{ usuario.correo }}</p>
-      <p><strong>Fecha de nacimiento:</strong> {{ usuario.fechaNacimiento }}</p>
-      <p><strong>Perfil:</strong> {{ usuario.perfil }}</p>
-      <p><strong>Descripción:</strong> {{ usuario.descripcion }}</p>
+    <div class="datos">
+      <p><strong>Correo:</strong> {{ usuarioActual.correo }}</p>
+      <p>
+        <strong>Fecha de nacimiento:</strong>
+        {{ usuarioActual.fechaNacimiento }}
+      </p>
+      <p><strong>Descripción:</strong> {{ usuarioActual.descripcion }}</p>
+      <p><strong>Perfil:</strong> {{ usuarioActual.perfil }}</p>
     </div>
   </div>
 
-  <ng-template #sinUsuario>
-    <div class="card">
-      <h1>No hay usuario logueado</h1>
-      <p>Iniciá sesión para ver tu perfil.</p>
-    </div>
-  </ng-template>
+  <div class="ultimas">
+    <h2>Mis últimas 3 publicaciones</h2>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <app-publicacion-card
+      *ngFor="let publicacion of publicaciones"
+      [publicacion]="publicacion"
+      [usuarioActual]="usuarioActual"
+    ></app-publicacion-card>
+
+    <p *ngIf="publicaciones.length === 0">
+      Todavía no realizaste publicaciones.
+    </p>
+  </div>
 </section>
+
+<ng-template #sinUsuario>
+  <section class="perfil-page">
+    <p class="error">No hay usuario logueado.</p>
+  </section>
+</ng-template>

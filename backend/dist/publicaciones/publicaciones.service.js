@@ -22,12 +22,18 @@ let PublicacionesService = class PublicacionesService {
     constructor(publicacionModel) {
         this.publicacionModel = publicacionModel;
     }
+    validarObjectId(id, campo) {
+        if (!id || !mongoose_2.Types.ObjectId.isValid(id)) {
+            throw new common_1.BadRequestException(`${campo} inválido`);
+        }
+        return new mongoose_2.Types.ObjectId(id);
+    }
     async crearPublicacion(dto, imagenUrl) {
         const publicacion = await this.publicacionModel.create({
             titulo: dto.titulo,
             descripcion: dto.descripcion,
             imagen: imagenUrl,
-            usuario: new mongoose_2.Types.ObjectId(dto.usuarioId),
+            usuario: this.validarObjectId(dto.usuarioId, 'usuarioId'),
             likes: [],
             activa: true,
         });
@@ -37,23 +43,35 @@ let PublicacionesService = class PublicacionesService {
         };
     }
     async listarPublicaciones(orden = 'fecha', offset = 0, limit = 5, usuarioId) {
-        const filtro = { activa: true };
+        const filtro = {
+            activa: true,
+        };
         if (usuarioId) {
-            filtro.usuario = new mongoose_2.Types.ObjectId(usuarioId);
+            filtro.usuario = this.validarObjectId(usuarioId, 'usuarioId');
         }
         const sort = orden === 'likes'
             ? { cantidadLikes: -1, createdAt: -1 }
             : { createdAt: -1 };
-        const publicaciones = await this.publicacionModel.aggregate([
-            { $match: filtro },
+        const pipeline = [
+            {
+                $match: filtro,
+            },
             {
                 $addFields: {
-                    cantidadLikes: { $size: '$likes' },
+                    cantidadLikes: {
+                        $size: '$likes',
+                    },
                 },
             },
-            { $sort: sort },
-            { $skip: offset },
-            { $limit: limit },
+            {
+                $sort: sort,
+            },
+            {
+                $skip: Number(offset),
+            },
+            {
+                $limit: Number(limit),
+            },
             {
                 $lookup: {
                     from: 'usuarios',
@@ -62,7 +80,12 @@ let PublicacionesService = class PublicacionesService {
                     as: 'usuario',
                 },
             },
-            { $unwind: '$usuario' },
+            {
+                $unwind: {
+                    path: '$usuario',
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
             {
                 $project: {
                     titulo: 1,
@@ -81,23 +104,25 @@ let PublicacionesService = class PublicacionesService {
                     'usuario.perfil': 1,
                 },
             },
-        ]);
+        ];
+        const publicaciones = await this.publicacionModel.aggregate(pipeline);
         const total = await this.publicacionModel.countDocuments(filtro);
         return {
             publicaciones,
             total,
-            offset,
-            limit,
+            offset: Number(offset),
+            limit: Number(limit),
         };
     }
     async darLike(publicacionId, usuarioId) {
-        const publicacion = await this.publicacionModel.findById(publicacionId);
+        const publicacion = await this.publicacionModel.findById(this.validarObjectId(publicacionId, 'publicacionId'));
         if (!publicacion || !publicacion.activa) {
             throw new common_1.NotFoundException('Publicación no encontrada');
         }
-        const yaDioLike = publicacion.likes.some((id) => id.toString() === usuarioId);
+        const usuarioObjectId = this.validarObjectId(usuarioId, 'usuarioId');
+        const yaDioLike = publicacion.likes.some((id) => id.toString() === usuarioObjectId.toString());
         if (!yaDioLike) {
-            publicacion.likes.push(new mongoose_2.Types.ObjectId(usuarioId));
+            publicacion.likes.push(usuarioObjectId);
             await publicacion.save();
         }
         return {
@@ -105,22 +130,24 @@ let PublicacionesService = class PublicacionesService {
         };
     }
     async quitarLike(publicacionId, usuarioId) {
-        const publicacion = await this.publicacionModel.findById(publicacionId);
+        const publicacion = await this.publicacionModel.findById(this.validarObjectId(publicacionId, 'publicacionId'));
         if (!publicacion || !publicacion.activa) {
             throw new common_1.NotFoundException('Publicación no encontrada');
         }
-        publicacion.likes = publicacion.likes.filter((id) => id.toString() !== usuarioId);
+        const usuarioObjectId = this.validarObjectId(usuarioId, 'usuarioId');
+        publicacion.likes = publicacion.likes.filter((id) => id.toString() !== usuarioObjectId.toString());
         await publicacion.save();
         return {
             mensaje: 'Like quitado correctamente',
         };
     }
     async eliminarPublicacion(publicacionId, usuarioId, perfil) {
-        const publicacion = await this.publicacionModel.findById(publicacionId);
+        const publicacion = await this.publicacionModel.findById(this.validarObjectId(publicacionId, 'publicacionId'));
         if (!publicacion || !publicacion.activa) {
             throw new common_1.NotFoundException('Publicación no encontrada');
         }
-        const esAutor = publicacion.usuario.toString() === usuarioId;
+        const usuarioObjectId = this.validarObjectId(usuarioId, 'usuarioId');
+        const esAutor = publicacion.usuario.toString() === usuarioObjectId.toString();
         const esAdmin = perfil === 'administrador';
         if (!esAutor && !esAdmin) {
             throw new common_1.ForbiddenException('No tenés permisos para eliminar esta publicación');

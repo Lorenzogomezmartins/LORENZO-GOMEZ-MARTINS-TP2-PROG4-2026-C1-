@@ -1,14 +1,85 @@
-<section class="page">
-  <div class="hero">
+<section class="publicaciones-page">
+  <div class="contenedor">
     <h1>Publicaciones</h1>
-    <p>
-      Esta pantalla queda creada para Sprint 1.  
-    </p>
-  </div>
 
-  <article class="post-card">
-    <h2>Bienvenido a RedSocial</h2>
-    <p>
-    </p>
-  </article>
+    <form
+      class="form-publicacion"
+      [formGroup]="publicacionForm"
+      (ngSubmit)="crearPublicacion()"
+    >
+      <h2>Crear publicación</h2>
+
+      <input
+        type="text"
+        placeholder="Título"
+        formControlName="titulo"
+      />
+
+      <textarea
+        placeholder="¿Qué querés compartir?"
+        formControlName="descripcion"
+      ></textarea>
+
+      <input type="file" (change)="seleccionarImagen($event)" />
+
+      <button type="submit">Publicar</button>
+    </form>
+
+    <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <div class="filtros">
+      <button
+        type="button"
+        [class.activo]="orden === 'fecha'"
+        (click)="cambiarOrden('fecha')"
+      >
+        Más recientes
+      </button>
+
+      <button
+        type="button"
+        [class.activo]="orden === 'likes'"
+        (click)="cambiarOrden('likes')"
+      >
+        Más likes
+      </button>
+    </div>
+
+    <app-publicacion-card
+      *ngFor="let publicacion of publicaciones"
+      [publicacion]="publicacion"
+      [usuarioActual]="usuarioActual"
+      (like)="manejarLike($event)"
+      (eliminar)="eliminarPublicacion($event)"
+    ></app-publicacion-card>
+
+    <div class="paginacion">
+      <button
+        type="button"
+        (click)="paginaAnterior()"
+        [disabled]="offset === 0"
+      >
+        Anterior
+      </button>
+
+      <span>
+        Mostrando {{ offset + 1 }} -
+        {{
+          offset + limit > total
+            ? total
+            : offset + limit
+        }}
+        de {{ total }}
+      </span>
+
+      <button
+        type="button"
+        (click)="paginaSiguiente()"
+        [disabled]="offset + limit >= total"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
 </section>

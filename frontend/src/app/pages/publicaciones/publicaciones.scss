@@ -1,26 +1,110 @@
-.page {
-  min-height: calc(100vh - 72px);
-  padding: 48px 16px;
-  background: #f8fafc;
-}
+.publicaciones-page {
+  min-height: 100vh;
+  background: #f3f4f6;
+  padding: 40px 16px;
 
-.hero,
-.post-card {
-  max-width: 800px;
-  margin: 0 auto 24px;
-  background: white;
-  padding: 28px;
-  border-radius: 22px;
-  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
-}
+  .contenedor {
+    max-width: 850px;
+    margin: auto;
+  }
 
-h1,
-h2 {
-  margin-top: 0;
-  color: #111827;
-}
+  h1 {
+    text-align: center;
+    color: #111827;
+    margin-bottom: 24px;
+  }
 
-p {
-  color: #4b5563;
-  line-height: 1.6;
+  .form-publicacion {
+    background: white;
+    padding: 22px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    margin-bottom: 24px;
+
+    h2 {
+      margin-top: 0;
+      color: #111827;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+  }
+
+  .filtros {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 22px;
+
+    button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      background: #e5e7eb;
+      font-weight: 700;
+    }
+
+    .activo {
+      background: #2563eb;
+      color: white;
+    }
+  }
+
+  .paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+
+    button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      background: #111827;
+      color: white;
+      font-weight: 700;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .mensaje {
+    color: #16a34a;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .error {
+    color: #dc2626;
+    font-weight: 700;
+    text-align: center;
+  }
 }

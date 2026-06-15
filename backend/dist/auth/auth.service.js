@@ -69,7 +69,8 @@ let AuthService = class AuthService {
             perfil: registroDto.perfil || 'usuario',
             activo: true,
         });
-        const { password, ...usuarioSinPassword } = usuarioCreado.toObject();
+        const { password: _password, ...usuarioSinPassword } = usuarioCreado.toObject();
+        void _password;
         return {
             mensaje: 'Usuario registrado correctamente',
             usuario: usuarioSinPassword,
@@ -87,7 +88,8 @@ let AuthService = class AuthService {
         if (!passwordValida) {
             throw new common_1.UnauthorizedException('Usuario o contraseña incorrectos');
         }
-        const { password, ...usuarioSinPassword } = usuario.toObject();
+        const { password: _password, ...usuarioSinPassword } = usuario.toObject();
+        void _password;
         return {
             mensaje: 'Login correcto',
             usuario: usuarioSinPassword,

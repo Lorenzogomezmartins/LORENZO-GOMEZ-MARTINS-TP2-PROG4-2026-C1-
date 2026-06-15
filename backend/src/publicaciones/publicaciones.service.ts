@@ -5,10 +5,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model, PipelineStage, Types } from 'mongoose';
+import { Model, PipelineStage, Types } from 'mongoose';
 
 import { Publicacion, PublicacionDocument } from './schemas/publicacion.schema';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
+
+type FiltroPublicaciones = {
+  activa: boolean;
+  usuario?: Types.ObjectId;
+};
 
 @Injectable()
 export class PublicacionesService {
@@ -47,7 +52,9 @@ export class PublicacionesService {
     limit: number = 5,
     usuarioId?: string,
   ) {
-    const filtro: FilterQuery<PublicacionDocument> = { activa: true };
+    const filtro: FiltroPublicaciones = {
+      activa: true,
+    };
 
     if (usuarioId) {
       filtro.usuario = this.validarObjectId(usuarioId, 'usuarioId');
@@ -59,15 +66,25 @@ export class PublicacionesService {
         : { createdAt: -1 };
 
     const pipeline: PipelineStage[] = [
-      { $match: filtro },
+      {
+        $match: filtro,
+      },
       {
         $addFields: {
-          cantidadLikes: { $size: '$likes' },
+          cantidadLikes: {
+            $size: '$likes',
+          },
         },
       },
-      { $sort: sort },
-      { $skip: Number(offset) },
-      { $limit: Number(limit) },
+      {
+        $sort: sort,
+      },
+      {
+        $skip: Number(offset),
+      },
+      {
+        $limit: Number(limit),
+      },
       {
         $lookup: {
           from: 'usuarios',

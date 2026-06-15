@@ -1,0 +1,44 @@
+<article class="card-publicacion">
+  <header class="autor">
+    <img
+      [src]="publicacion.usuario?.imagenPerfil || 'assets/avatar-default.png'"
+      alt="Foto de perfil"
+    />
+
+    <div>
+      <h4>
+        {{ publicacion.usuario?.nombre }}
+        {{ publicacion.usuario?.apellido }}
+      </h4>
+      <span>@{{ publicacion.usuario?.nombreUsuario }}</span>
+    </div>
+  </header>
+
+  <h3>{{ publicacion.titulo }}</h3>
+
+  <p>{{ publicacion.descripcion }}</p>
+
+  <img
+    *ngIf="publicacion.imagen"
+    class="imagen-publicacion"
+    [src]="publicacion.imagen"
+    alt="Imagen de publicación"
+  />
+
+  <footer>
+    <button type="button" (click)="clickLike()">
+      {{ usuarioDioLike() ? 'Quitar me gusta' : 'Me gusta' }}
+    </button>
+
+    <span>{{ publicacion.cantidadLikes || 0 }} me gusta</span>
+
+    <button
+      *ngIf="puedeEliminar()"
+      type="button"
+      class="btn-eliminar"
+      (click)="clickEliminar()"
+    >
+      Eliminar
+    </button>
+  </footer>
+</article>

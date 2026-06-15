@@ -4,6 +4,7 @@ import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 export declare class PublicacionesService {
     private readonly publicacionModel;
     constructor(publicacionModel: Model<PublicacionDocument>);
+    private validarObjectId;
     crearPublicacion(dto: CrearPublicacionDto, imagenUrl: string): Promise<{
         mensaje: string;
         publicacion: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, Publicacion, {}, import("mongoose").DefaultSchemaOptions> & Publicacion & {

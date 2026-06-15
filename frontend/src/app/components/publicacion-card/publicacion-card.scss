@@ -1,0 +1,77 @@
+.card-publicacion {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  margin-bottom: 22px;
+
+  .autor {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+
+    img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e5e7eb;
+    }
+
+    h4 {
+      margin: 0;
+      color: #111827;
+    }
+
+    span {
+      color: #6b7280;
+      font-size: 14px;
+    }
+  }
+
+  h3 {
+    margin: 10px 0;
+    color: #111827;
+  }
+
+  p {
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .imagen-publicacion {
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-top: 12px;
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+
+    button {
+      border: none;
+      background: #2563eb;
+      color: white;
+      padding: 9px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-eliminar {
+      background: #dc2626;
+    }
+
+    span {
+      color: #4b5563;
+      font-weight: 600;
+    }
+  }
+}

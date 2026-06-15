@@ -24,37 +24,53 @@ export class Registro {
   registroForm!: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-  ) {
-    this.registroForm = this.fb.group({
-      nombre: ['', [Validators.required]],
-      apellido: ['', [Validators.required]],
-      correo: ['', [Validators.required, Validators.email]],
-      nombreUsuario: ['', [Validators.required]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/),
-        ],
+  private fb: FormBuilder,
+  private authService: AuthService,
+  private router: Router,
+) {
+  this.registroForm = this.fb.group({
+    nombre: ['', [Validators.required]],
+    apellido: ['', [Validators.required]],
+    correo: ['', [Validators.required, Validators.email]],
+    nombreUsuario: ['', [Validators.required]],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/),
       ],
-      repetirPassword: ['', [Validators.required]],
-      fechaNacimiento: ['', [Validators.required]],
-      descripcion: ['', [Validators.required, Validators.maxLength(250)]],
-      perfil: ['usuario', [Validators.required]],
-    });
-  }
+    ],
+    repetirPassword: ['', [Validators.required]],
+    fechaNacimiento: ['', [Validators.required]],
+    descripcion: ['', [Validators.required, Validators.maxLength(250)]],
+    perfil: ['usuario', [Validators.required]],
+  });
+}
 
-  seleccionarImagen(event: Event) {
-    const input = event.target as HTMLInputElement;
+/* AGREGAR DESDE ACA */
 
-    if (input.files && input.files.length > 0) {
-      this.imagenSeleccionada = input.files[0];
-    }
+get passwordControl() {
+  return this.registroForm.get('password');
+}
+
+tieneMayuscula(password: string): boolean {
+  return /[A-Z]/.test(password);
+}
+
+tieneNumero(password: string): boolean {
+  return /\d/.test(password);
+}
+
+/* HASTA ACA */
+
+seleccionarImagen(event: Event) {
+  const input = event.target as HTMLInputElement;
+
+  if (input.files && input.files.length > 0) {
+    this.imagenSeleccionada = input.files[0];
   }
+}
 
   registrar() {
     this.mensaje = '';

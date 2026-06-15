@@ -1,42 +1,60 @@
-.page {
-  min-height: calc(100vh - 72px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.perfil-page {
+  min-height: 100vh;
+  background: #f3f4f6;
   padding: 40px 16px;
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-}
 
-.card {
-  width: 100%;
-  max-width: 520px;
-  background: white;
-  padding: 34px;
-  border-radius: 26px;
-  text-align: center;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
-}
+  .perfil-card {
+    max-width: 650px;
+    margin: 0 auto 30px;
+    background: white;
+    padding: 28px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
 
-.avatar {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 5px solid #2563eb;
-}
+    img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e5e7eb;
+      margin-bottom: 12px;
+    }
 
-h1 {
-  margin-bottom: 4px;
-  color: #111827;
-}
+    h1 {
+      margin: 8px 0;
+      color: #111827;
+    }
 
-.username {
-  color: #2563eb;
-  font-weight: 700;
-}
+    > p {
+      color: #6b7280;
+      font-weight: 600;
+    }
 
-.info {
-  margin-top: 24px;
-  text-align: left;
-  color: #374151;
+    .datos {
+      margin-top: 20px;
+      text-align: left;
+
+      p {
+        color: #374151;
+      }
+    }
+  }
+
+  .ultimas {
+    max-width: 850px;
+    margin: auto;
+
+    h2 {
+      text-align: center;
+      color: #111827;
+      margin-bottom: 20px;
+    }
+  }
+
+  .error {
+    color: #dc2626;
+    text-align: center;
+    font-weight: 700;
+  }
 }

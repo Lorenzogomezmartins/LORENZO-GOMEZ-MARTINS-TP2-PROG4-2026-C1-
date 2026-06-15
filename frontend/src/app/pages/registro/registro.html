@@ -39,12 +39,47 @@
       </label>
 
       <label>
-        Contraseña
-        <input type="password" formControlName="password" />
-        <span *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.invalid">
-          Mínimo 8 caracteres, una mayúscula y un número.
-        </span>
-      </label>
+  Contraseña
+  <input type="password" formControlName="password" />
+
+  <span
+    *ngIf="
+      registroForm.get('password')?.touched &&
+      registroForm.get('password')?.errors?.['required']
+    "
+  >
+    La contraseña es obligatoria.
+  </span>
+
+  <span
+    *ngIf="
+      registroForm.get('password')?.touched &&
+      registroForm.get('password')?.errors?.['minlength']
+    "
+  >
+    Debe tener al menos 8 caracteres.
+  </span>
+
+  <span
+    *ngIf="
+      registroForm.get('password')?.touched &&
+      registroForm.get('password')?.value &&
+      !tieneMayuscula(registroForm.get('password')?.value)
+    "
+  >
+    Debe contener al menos una letra mayúscula.
+  </span>
+
+  <span
+    *ngIf="
+      registroForm.get('password')?.touched &&
+      registroForm.get('password')?.value &&
+      !tieneNumero(registroForm.get('password')?.value)
+    "
+  >
+    Debe contener al menos un número.
+  </span>
+</label>
 
       <label>
         Repetir contraseña
