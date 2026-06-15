@@ -10,7 +10,14 @@
         {{ publicacion.usuario?.nombre }}
         {{ publicacion.usuario?.apellido }}
       </h4>
-      <span>@{{ publicacion.usuario?.nombreUsuario }}</span>
+
+      <span>
+        @{{ publicacion.usuario?.nombreUsuario }}
+      </span>
+
+      <div class="fecha-publicacion">
+        {{ formatearFecha(publicacion.createdAt) }}
+      </div>
     </div>
   </header>
 

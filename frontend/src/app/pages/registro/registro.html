@@ -1,13 +1,18 @@
+<!-- Contenedor principal de la página de registro. -->
 <section class="page">
+  <!-- Tarjeta visual donde se muestra el formulario. -->
   <div class="card">
     <h1>Crear cuenta</h1>
     <p class="subtitle">Registrate para entrar a la red social.</p>
 
+    <!-- Formulario reactivo conectado con registroForm y enviado con registrar(). -->
     <form [formGroup]="registroForm" (ngSubmit)="registrar()">
       <div class="grid">
         <label>
           Nombre
           <input type="text" formControlName="nombre" />
+
+          <!-- Muestra error si el campo fue tocado y es inválido. -->
           <span *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid">
             El nombre es obligatorio.
           </span>
@@ -16,6 +21,8 @@
         <label>
           Apellido
           <input type="text" formControlName="apellido" />
+
+          <!-- Valida que el apellido sea obligatorio. -->
           <span *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid">
             El apellido es obligatorio.
           </span>
@@ -25,6 +32,8 @@
       <label>
         Correo
         <input type="email" formControlName="correo" />
+
+        <!-- Muestra error si el correo está vacío o tiene formato inválido. -->
         <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid">
           Ingresá un correo válido.
         </span>
@@ -33,53 +42,59 @@
       <label>
         Nombre de usuario
         <input type="text" formControlName="nombreUsuario" />
+
+        <!-- Valida que el nombre de usuario sea obligatorio. -->
         <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.invalid">
           El nombre de usuario es obligatorio.
         </span>
       </label>
 
       <label>
-  Contraseña
-  <input type="password" formControlName="password" />
+        Contraseña
+        <input type="password" formControlName="password" />
 
-  <span
-    *ngIf="
-      registroForm.get('password')?.touched &&
-      registroForm.get('password')?.errors?.['required']
-    "
-  >
-    La contraseña es obligatoria.
-  </span>
+        <!-- Error cuando la contraseña está vacía. -->
+        <span
+          *ngIf="
+            registroForm.get('password')?.touched &&
+            registroForm.get('password')?.errors?.['required']
+          "
+        >
+          La contraseña es obligatoria.
+        </span>
 
-  <span
-    *ngIf="
-      registroForm.get('password')?.touched &&
-      registroForm.get('password')?.errors?.['minlength']
-    "
-  >
-    Debe tener al menos 8 caracteres.
-  </span>
+        <!-- Error cuando la contraseña tiene menos de 8 caracteres. -->
+        <span
+          *ngIf="
+            registroForm.get('password')?.touched &&
+            registroForm.get('password')?.errors?.['minlength']
+          "
+        >
+          Debe tener al menos 8 caracteres.
+        </span>
 
-  <span
-    *ngIf="
-      registroForm.get('password')?.touched &&
-      registroForm.get('password')?.value &&
-      !tieneMayuscula(registroForm.get('password')?.value)
-    "
-  >
-    Debe contener al menos una letra mayúscula.
-  </span>
+        <!-- Error cuando la contraseña no contiene mayúscula. -->
+        <span
+          *ngIf="
+            registroForm.get('password')?.touched &&
+            registroForm.get('password')?.value &&
+            !tieneMayuscula(registroForm.get('password')?.value)
+          "
+        >
+          Debe contener al menos una letra mayúscula.
+        </span>
 
-  <span
-    *ngIf="
-      registroForm.get('password')?.touched &&
-      registroForm.get('password')?.value &&
-      !tieneNumero(registroForm.get('password')?.value)
-    "
-  >
-    Debe contener al menos un número.
-  </span>
-</label>
+        <!-- Error cuando la contraseña no contiene número. -->
+        <span
+          *ngIf="
+            registroForm.get('password')?.touched &&
+            registroForm.get('password')?.value &&
+            !tieneNumero(registroForm.get('password')?.value)
+          "
+        >
+          Debe contener al menos un número.
+        </span>
+      </label>
 
       <label>
         Repetir contraseña
@@ -98,6 +113,7 @@
 
       <label>
         Imagen de perfil
+        <!-- Al seleccionar una imagen, ejecuta seleccionarImagen($event). -->
         <input type="file" accept="image/*" (change)="seleccionarImagen($event)" />
       </label>
 
@@ -109,9 +125,13 @@
         </select>
       </label>
 
+      <!-- Mensaje de éxito del registro. -->
       <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+
+      <!-- Mensaje de error del registro. -->
       <p class="error" *ngIf="error">{{ error }}</p>
 
+      <!-- Envía el formulario. -->
       <button type="submit">Registrarme</button>
     </form>
   </div>

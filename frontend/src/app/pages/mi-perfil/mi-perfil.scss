@@ -1,42 +1,68 @@
 .perfil-page {
   min-height: 100vh;
-  background: #f3f4f6;
-  padding: 40px 16px;
+  background: linear-gradient(135deg, #e0f2fe, #f3f4f6 45%, #dbeafe);
+  padding: 50px 16px;
 
   .perfil-card {
-    max-width: 650px;
-    margin: 0 auto 30px;
-    background: white;
-    padding: 28px;
-    border-radius: 20px;
+    max-width: 700px;
+    margin: 0 auto 36px;
+    background: #ffffff;
+    padding: 34px;
+    border-radius: 24px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+
+    border: 3px solid #60a5fa;
+
+    box-shadow:
+      0 12px 28px rgba(37, 99, 235, 0.18),
+      0 22px 50px rgba(15, 23, 42, 0.12);
 
     img {
-      width: 120px;
-      height: 120px;
+      width: 135px;
+      height: 135px;
       border-radius: 50%;
       object-fit: cover;
       background: #e5e7eb;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+
+      border: 5px solid #2563eb;
+      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
     }
 
     h1 {
-      margin: 8px 0;
+      margin: 10px 0 4px;
       color: #111827;
+      font-size: 30px;
     }
 
     > p {
-      color: #6b7280;
-      font-weight: 600;
+      color: #2563eb;
+      font-weight: 800;
+      margin-bottom: 22px;
     }
 
     .datos {
-      margin-top: 20px;
+      margin-top: 24px;
       text-align: left;
+      background: #f8fafc;
+      border: 2px solid #dbeafe;
+      border-radius: 18px;
+      padding: 20px;
 
       p {
         color: #374151;
+        margin: 12px 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      p:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      strong {
+        color: #111827;
       }
     }
   }
@@ -48,7 +74,8 @@
     h2 {
       text-align: center;
       color: #111827;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      font-size: 28px;
     }
   }
 

@@ -33,11 +33,20 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "apellido", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, unique: true, lowercase: true, trim: true }),
+    (0, mongoose_1.Prop)({
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+    }),
     __metadata("design:type", String)
 ], Usuario.prototype, "correo", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, unique: true, trim: true }),
+    (0, mongoose_1.Prop)({
+        required: true,
+        unique: true,
+        trim: true,
+    }),
     __metadata("design:type", String)
 ], Usuario.prototype, "nombreUsuario", void 0);
 __decorate([
@@ -49,7 +58,10 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "fechaNacimiento", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, maxlength: 250 }),
+    (0, mongoose_1.Prop)({
+        required: true,
+        maxlength: 250,
+    }),
     __metadata("design:type", String)
 ], Usuario.prototype, "descripcion", void 0);
 __decorate([
@@ -57,7 +69,10 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "imagenPerfil", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ enum: ['usuario', 'administrador'], default: 'usuario' }),
+    (0, mongoose_1.Prop)({
+        enum: ['usuario', 'administrador'],
+        default: 'usuario',
+    }),
     __metadata("design:type", String)
 ], Usuario.prototype, "perfil", void 0);
 __decorate([

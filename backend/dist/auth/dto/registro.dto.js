@@ -43,7 +43,9 @@ __decorate([
 ], RegistroDto.prototype, "nombreUsuario", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(8, { message: 'La contraseña debe tener al menos 8 caracteres' }),
+    (0, class_validator_1.MinLength)(8, {
+        message: 'La contraseña debe tener al menos 8 caracteres',
+    }),
     (0, class_validator_1.Matches)(/^(?=.*[A-Z])(?=.*\d).+$/, {
         message: 'La contraseña debe tener al menos una mayúscula y un número',
     }),

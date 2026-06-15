@@ -23,7 +23,9 @@ let UsuariosService = class UsuariosService {
         this.usuarioModel = usuarioModel;
     }
     buscarPorCorreo(correo) {
-        return this.usuarioModel.findOne({ correo: correo.toLowerCase() });
+        return this.usuarioModel.findOne({
+            correo: correo.toLowerCase(),
+        });
     }
     buscarPorNombreUsuario(nombreUsuario) {
         return this.usuarioModel.findOne({ nombreUsuario });
