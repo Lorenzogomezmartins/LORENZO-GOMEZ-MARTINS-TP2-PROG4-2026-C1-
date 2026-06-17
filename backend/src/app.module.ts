@@ -1,26 +1,23 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Module } from '@nestjs/common'; // Decorador para definir módulos en NestJS
+import { ConfigModule } from '@nestjs/config'; // Permite leer variables del archivo .env
+import { MongooseModule } from '@nestjs/mongoose'; // Permite conectar NestJS con MongoDB
 
-import { AuthModule } from './auth/auth.module';
-import { UsuariosModule } from './usuarios/usuarios.module';
-import { PublicacionesModule } from './publicaciones/publicaciones.module';
+import { AuthModule } from './auth/auth.module'; // Módulo de autenticación
+import { UsuariosModule } from './usuarios/usuarios.module'; // Módulo de usuarios
+import { PublicacionesModule } from './publicaciones/publicaciones.module'; // Módulo de publicaciones
 
+// Módulo principal de la aplicación
 @Module({
   imports: [
-    /*
-      ConfigModule permite leer variables del archivo .env.
-      Ejemplo: MONGO_URI.
-    */
+    // Carga las variables de entorno (.env) de forma global
     ConfigModule.forRoot({
       isGlobal: true,
     }),
 
-    /*
-      Conexión a MongoDB usando la URI del .env.
-    */
+    // Conecta la aplicación a MongoDB usando la URI del .env
     MongooseModule.forRoot(process.env.MONGO_URI || ''),
 
+    // Importa los módulos de la aplicación
     AuthModule,
     UsuariosModule,
     PublicacionesModule,
