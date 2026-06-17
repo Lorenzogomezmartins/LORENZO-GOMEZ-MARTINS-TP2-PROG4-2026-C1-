@@ -1,0 +1,56 @@
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(15, 23, 42, 0.65);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.modal-sesion {
+  width: min(430px, 92%);
+  background: white;
+  padding: 30px;
+  border-radius: 22px;
+  text-align: center;
+
+  border: 3px solid #60a5fa;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+
+  h2 {
+    margin-top: 0;
+    color: #111827;
+  }
+
+  p {
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .acciones {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  button {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 800;
+  }
+
+  .btn-secundario {
+    background: #6b7280;
+  }
+}

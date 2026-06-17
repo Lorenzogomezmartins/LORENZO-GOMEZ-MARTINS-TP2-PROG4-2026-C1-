@@ -50,4 +50,4 @@ async function bootstrap() {
 }
 
 // Ejecuta la inicialización de la aplicación
-bootstrap();
+void bootstrap();

@@ -25,6 +25,12 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
+    obtenerToken(authorization, tokenBody) {
+        if (authorization?.startsWith('Bearer ')) {
+            return authorization.replace('Bearer ', '');
+        }
+        return tokenBody || '';
+    }
     registrar(registroDto, file) {
         const imagenPerfilUrl = file
             ? `http://localhost:3000/uploads/${file.filename}`
@@ -33,6 +39,14 @@ let AuthController = class AuthController {
     }
     login(loginDto) {
         return this.authService.login(loginDto);
+    }
+    autorizar(authorization, tokenBody) {
+        const token = this.obtenerToken(authorization, tokenBody);
+        return this.authService.autorizar(token);
+    }
+    refrescar(authorization, tokenBody) {
+        const token = this.obtenerToken(authorization, tokenBody);
+        return this.authService.refrescar(token);
     }
 };
 exports.AuthController = AuthController;
@@ -61,6 +75,22 @@ __decorate([
     __metadata("design:paramtypes", [login_dto_1.LoginDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)('autorizar'),
+    __param(0, (0, common_1.Headers)('authorization')),
+    __param(1, (0, common_1.Body)('token')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "autorizar", null);
+__decorate([
+    (0, common_1.Post)('refrescar'),
+    __param(0, (0, common_1.Headers)('authorization')),
+    __param(1, (0, common_1.Body)('token')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "refrescar", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

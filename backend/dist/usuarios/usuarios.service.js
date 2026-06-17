@@ -38,6 +38,9 @@ let UsuariosService = class UsuariosService {
             ],
         });
     }
+    buscarPorId(id) {
+        return this.usuarioModel.findById(id);
+    }
     crearUsuario(data) {
         const nuevoUsuario = new this.usuarioModel(data);
         return nuevoUsuario.save();

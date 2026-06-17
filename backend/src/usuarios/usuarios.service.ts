@@ -26,6 +26,7 @@ export class UsuariosService {
 
   // Busca un usuario por correo o nombre de usuario
   // Se utiliza durante el login
+  // Busca un usuario por correo o nombre de usuario
   buscarPorIdentificador(identificador: string) {
     return this.usuarioModel.findOne({
       $or: [
@@ -35,11 +36,15 @@ export class UsuariosService {
     });
   }
 
+  // Busca un usuario por su ID de MongoDB
+  buscarPorId(id: string) {
+    return this.usuarioModel.findById(id);
+  }
+
   // Crea y guarda un nuevo usuario en MongoDB
   crearUsuario(data: Partial<Usuario>) {
     const nuevoUsuario = new this.usuarioModel(data);
 
-    // Guarda el documento en la base de datos
     return nuevoUsuario.save();
   }
 }

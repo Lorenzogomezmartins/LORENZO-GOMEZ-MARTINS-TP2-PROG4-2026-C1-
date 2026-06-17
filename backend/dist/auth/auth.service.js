@@ -44,12 +44,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
+const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcryptjs"));
 const usuarios_service_1 = require("../usuarios/usuarios.service");
 let AuthService = class AuthService {
     usuariosService;
-    constructor(usuariosService) {
+    jwtService;
+    constructor(usuariosService, jwtService) {
         this.usuariosService = usuariosService;
+        this.jwtService = jwtService;
+    }
+    generarToken(usuario) {
+        const payload = {
+            sub: String(usuario._id),
+            correo: usuario.correo,
+            nombreUsuario: usuario.nombreUsuario,
+            perfil: usuario.perfil,
+        };
+        return this.jwtService.sign(payload);
+    }
+    quitarPassword(usuario) {
+        const usuarioObj = usuario;
+        const { password: _password, ...usuarioSinPassword } = usuarioObj;
+        void _password;
+        return usuarioSinPassword;
     }
     async registrar(registroDto, imagenPerfilUrl) {
         const existeCorreo = await this.usuariosService.buscarPorCorreo(registroDto.correo);
@@ -69,11 +87,13 @@ let AuthService = class AuthService {
             perfil: registroDto.perfil || 'usuario',
             activo: true,
         });
-        const { password: _password, ...usuarioSinPassword } = usuarioCreado.toObject();
-        void _password;
+        const usuarioObj = usuarioCreado.toObject();
+        const usuarioSinPassword = this.quitarPassword(usuarioObj);
+        const token = this.generarToken(usuarioSinPassword);
         return {
             mensaje: 'Usuario registrado correctamente',
             usuario: usuarioSinPassword,
+            token,
         };
     }
     async login(loginDto) {
@@ -88,17 +108,64 @@ let AuthService = class AuthService {
         if (!passwordValida) {
             throw new common_1.UnauthorizedException('Usuario o contraseña incorrectos');
         }
-        const { password: _password, ...usuarioSinPassword } = usuario.toObject();
-        void _password;
+        const usuarioObj = usuario.toObject();
+        const usuarioSinPassword = this.quitarPassword(usuarioObj);
+        const token = this.generarToken(usuarioSinPassword);
         return {
             mensaje: 'Login correcto',
             usuario: usuarioSinPassword,
+            token,
         };
+    }
+    async autorizar(token) {
+        try {
+            const payload = this.jwtService.verify(token);
+            const usuarioEncontrado = await this.usuariosService.buscarPorId(payload.sub);
+            if (!usuarioEncontrado) {
+                throw new common_1.UnauthorizedException('Token inválido');
+            }
+            const usuarioObj = usuarioEncontrado.toObject();
+            if (!usuarioObj.activo) {
+                throw new common_1.UnauthorizedException('Usuario deshabilitado');
+            }
+            const usuarioSinPassword = this.quitarPassword(usuarioObj);
+            return {
+                mensaje: 'Token válido',
+                usuario: usuarioSinPassword,
+            };
+        }
+        catch {
+            throw new common_1.UnauthorizedException('Token inválido o vencido');
+        }
+    }
+    async refrescar(token) {
+        try {
+            const payload = this.jwtService.verify(token);
+            const usuarioEncontrado = await this.usuariosService.buscarPorId(payload.sub);
+            if (!usuarioEncontrado) {
+                throw new common_1.UnauthorizedException('Token inválido');
+            }
+            const usuarioObj = usuarioEncontrado.toObject();
+            if (!usuarioObj.activo) {
+                throw new common_1.UnauthorizedException('Usuario deshabilitado');
+            }
+            const usuarioSinPassword = this.quitarPassword(usuarioObj);
+            const nuevoToken = this.generarToken(usuarioSinPassword);
+            return {
+                mensaje: 'Token refrescado correctamente',
+                usuario: usuarioSinPassword,
+                token: nuevoToken,
+            };
+        }
+        catch {
+            throw new common_1.UnauthorizedException('Token inválido o vencido');
+        }
     }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [usuarios_service_1.UsuariosService])
+    __metadata("design:paramtypes", [usuarios_service_1.UsuariosService,
+        jwt_1.JwtService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map
