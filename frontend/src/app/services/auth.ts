@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core'; // Permite que el servicio pueda iny
 export class AuthService {
 
   // URL base del módulo de autenticación del backend
-  private apiUrl = 'http://localhost:3000/auth';
+   private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/auth';
 
   // Inyección de HttpClient
   constructor(private http: HttpClient) {}
