@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common'; // Decorador para definir módulos
-import { MongooseModule } from '@nestjs/mongoose'; // Permite registrar modelos de MongoDB
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
-import { UsuariosService } from './usuarios.service'; // Servicio de usuarios
-import { Usuario, UsuarioSchema } from './schemas/usuario.schema'; // Entidad y esquema de Usuario
+import { UsuariosController } from './usuario.controller';
+import { UsuariosService } from './usuarios.service';
+import { Usuario, UsuarioSchema } from './schemas/usuario.schema';
 
 @Module({
   imports: [
-    // Registra el modelo Usuario para poder usar @InjectModel()
     MongooseModule.forFeature([
       {
         name: Usuario.name,
@@ -15,10 +15,10 @@ import { Usuario, UsuarioSchema } from './schemas/usuario.schema'; // Entidad y 
     ]),
   ],
 
-  // Servicios disponibles dentro del módulo
+  controllers: [UsuariosController],
+
   providers: [UsuariosService],
 
-  // Permite que otros módulos utilicen UsuariosService
   exports: [UsuariosService],
 })
 export class UsuariosModule {}

@@ -1,0 +1,235 @@
+<section class="dashboard-usuarios">
+  <h1>Dashboard de usuarios</h1>
+
+  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <div class="contenido-dashboard">
+
+    <div class="panel-formulario">
+      <form [formGroup]="form" (ngSubmit)="crearUsuario()">
+
+        <h2>Crear nuevo usuario</h2>
+
+        <input
+          placeholder="Nombre"
+          formControlName="nombre"
+        />
+
+        <small
+          *ngIf="
+            form.get('nombre')?.invalid &&
+            form.get('nombre')?.touched
+          "
+        >
+          El nombre es obligatorio.
+        </small>
+
+        <input
+          placeholder="Apellido"
+          formControlName="apellido"
+        />
+
+        <small
+          *ngIf="
+            form.get('apellido')?.invalid &&
+            form.get('apellido')?.touched
+          "
+        >
+          El apellido es obligatorio.
+        </small>
+
+        <input
+          placeholder="Correo"
+          formControlName="correo"
+        />
+
+        <small
+          *ngIf="
+            form.get('correo')?.hasError('required') &&
+            form.get('correo')?.touched
+          "
+        >
+          El correo es obligatorio.
+        </small>
+
+        <small
+          *ngIf="
+            form.get('correo')?.hasError('email') &&
+            form.get('correo')?.touched
+          "
+        >
+          Ingresá un correo válido.
+        </small>
+
+        <input
+          placeholder="Nombre de usuario"
+          formControlName="nombreUsuario"
+        />
+
+        <small
+          *ngIf="
+            form.get('nombreUsuario')?.invalid &&
+            form.get('nombreUsuario')?.touched
+          "
+        >
+          El nombre de usuario es obligatorio.
+        </small>
+
+        <input
+          type="password"
+          placeholder="Contraseña"
+          formControlName="password"
+        />
+
+        <small
+          *ngIf="
+            form.get('password')?.hasError('required') &&
+            form.get('password')?.touched
+          "
+        >
+          La contraseña es obligatoria.
+        </small>
+
+        <small
+          *ngIf="
+            form.get('password')?.hasError('minlength') &&
+            form.get('password')?.touched
+          "
+        >
+          Debe tener al menos 8 caracteres.
+        </small>
+
+        <small
+          *ngIf="
+            form.get('password')?.hasError('pattern') &&
+            form.get('password')?.touched
+          "
+        >
+          Debe contener una mayúscula y un número.
+        </small>
+
+        <input
+          type="date"
+          formControlName="fechaNacimiento"
+        />
+
+        <small
+          *ngIf="
+            form.get('fechaNacimiento')?.invalid &&
+            form.get('fechaNacimiento')?.touched
+          "
+        >
+          La fecha es obligatoria.
+        </small>
+
+        <textarea
+          placeholder="Descripción breve"
+          formControlName="descripcion"
+        ></textarea>
+
+        <small
+          *ngIf="
+            form.get('descripcion')?.hasError('required') &&
+            form.get('descripcion')?.touched
+          "
+        >
+          La descripción es obligatoria.
+        </small>
+
+        <small
+          *ngIf="
+            form.get('descripcion')?.hasError('maxlength') &&
+            form.get('descripcion')?.touched
+          "
+        >
+          Máximo 250 caracteres.
+        </small>
+
+        <div class="radios">
+          <label>
+            <input
+              type="radio"
+              value="usuario"
+              formControlName="perfil"
+            />
+            Usuario
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              value="administrador"
+              formControlName="perfil"
+            />
+            Administrador
+          </label>
+        </div>
+
+        <button type="submit">
+          Crear usuario
+        </button>
+
+      </form>
+    </div>
+
+    <div class="panel-usuarios">
+      <h2>Listado de usuarios</h2>
+
+      <div class="lista-usuarios">
+
+        <article
+          class="usuario-card"
+          *ngFor="let usuario of usuarios"
+          appDeshabilitadoOpaco
+          [activo]="usuario.activo"
+        >
+          <h3
+            appResaltarAdmin
+            [perfil]="usuario.perfil"
+          >
+            {{ usuario | nombreCompleto }}
+          </h3>
+
+          <p>
+            <strong>Correo:</strong>
+            {{ usuario.correo }}
+          </p>
+
+          <p>
+            <strong>Usuario:</strong>
+            @{{ usuario.nombreUsuario }}
+          </p>
+
+          <p>
+            <strong>Perfil:</strong>
+            {{ usuario.perfil | perfilTexto }}
+          </p>
+
+          <p>
+            <strong>Estado:</strong>
+            {{ usuario.activo | estadoUsuario }}
+          </p>
+
+          <button
+            *ngIf="usuario.activo"
+            type="button"
+            (click)="deshabilitarUsuario(usuario._id)"
+          >
+            Deshabilitar
+          </button>
+
+          <button
+            *ngIf="!usuario.activo"
+            type="button"
+            (click)="habilitarUsuario(usuario._id)"
+          >
+            Habilitar
+          </button>
+        </article>
+
+      </div>
+    </div>
+
+  </div>
+</section>

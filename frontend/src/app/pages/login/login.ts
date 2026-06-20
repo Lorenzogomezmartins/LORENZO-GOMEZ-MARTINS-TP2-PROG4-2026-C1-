@@ -75,9 +75,10 @@ export class Login {
       .subscribe({
         // Si el login es correcto, guarda el usuario y navega a publicaciones.
         next: (resp: any) => {
-          this.authService.guardarUsuario(resp.usuario);
-          this.router.navigate(['/publicaciones']);
-        },
+  localStorage.setItem('token', resp.token);
+  this.authService.guardarUsuario(resp.usuario);
+  this.router.navigate(['/publicaciones']);
+},
 
         // Si ocurre un error, muestra el mensaje correspondiente.
         error: (err) => {

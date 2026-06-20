@@ -31,11 +31,23 @@ export class Navbar {
     return localStorage.getItem('usuario') !== null;
   }
 
+  // Verifica si el usuario actual es administrador.
+  esAdmin(): boolean {
+    const usuario = JSON.parse(
+      localStorage.getItem('usuario') || 'null',
+    );
+
+    return usuario?.perfil === 'administrador';
+  }
+
   // Cierra la sesión del usuario actual.
   cerrarSesion() {
 
     // Elimina la información del usuario almacenada localmente.
     localStorage.removeItem('usuario');
+
+    // Elimina el token.
+    localStorage.removeItem('token');
 
     // Redirige al login.
     this.router.navigate(['/login']);

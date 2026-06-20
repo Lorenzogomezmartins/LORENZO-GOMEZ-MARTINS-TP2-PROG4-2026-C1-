@@ -1,23 +1,26 @@
 import {
-  BadRequestException, // Error 400 para solicitudes inválidas
-  Injectable, // Permite inyectar este servicio en otros componentes
-  UnauthorizedException, // Error 401 para autenticación fallida
+  BadRequestException, // Error 400: datos inválidos o repetidos
+  Injectable, // Permite inyectar este servicio en NestJS
+  UnauthorizedException, // Error 401: credenciales incorrectas o usuario no autorizado
 } from '@nestjs/common';
 
 import * as bcrypt from 'bcryptjs'; // Librería para encriptar y comparar contraseñas
+import * as jwt from 'jsonwebtoken'; // Librería para generar tokens JWT
 
 import { UsuariosService } from '../usuarios/usuarios.service'; // Servicio de usuarios
-import { RegistroDto } from './dto/registro.dto'; // DTO para registro
-import { LoginDto } from './dto/login.dto'; // DTO para login
+import { RegistroDto } from './dto/registro.dto'; // DTO del registro
+import { LoginDto } from './dto/login.dto'; // DTO del login
 
+// Servicio encargado de registro, login y generación de token
 @Injectable()
 export class AuthService {
-  // Inyección de dependencias del servicio de usuarios
-  constructor(private readonly usuariosService: UsuariosService) {}
+  constructor(
+    private readonly usuariosService: UsuariosService,
+  ) {}
 
-  // Registra un nuevo usuario
+  // Registra un usuario nuevo
   async registrar(registroDto: RegistroDto, imagenPerfilUrl: string) {
-    // Busca si ya existe un usuario con ese correo
+    // Verifica si ya existe el correo
     const existeCorreo = await this.usuariosService.buscarPorCorreo(
       registroDto.correo,
     );
@@ -26,7 +29,7 @@ export class AuthService {
       throw new BadRequestException('Ya existe un usuario con ese correo');
     }
 
-    // Busca si ya existe un usuario con ese nombre de usuario
+    // Verifica si ya existe el nombre de usuario
     const existeNombreUsuario =
       await this.usuariosService.buscarPorNombreUsuario(
         registroDto.nombreUsuario,
@@ -38,33 +41,46 @@ export class AuthService {
       );
     }
 
-    // Encripta la contraseña antes de guardarla en la base de datos
+    // Encripta la contraseña antes de guardarla
     const passwordEncriptada = await bcrypt.hash(registroDto.password, 10);
 
     // Crea el usuario en MongoDB
     const usuarioCreado = await this.usuariosService.crearUsuario({
-      ...registroDto, // Copia todas las propiedades del DTO
-      correo: registroDto.correo.toLowerCase(), // Guarda el correo en minúsculas
-      password: passwordEncriptada, // Guarda la contraseña encriptada
+      ...registroDto,
+      correo: registroDto.correo.toLowerCase(),
+      password: passwordEncriptada,
       imagenPerfil: imagenPerfilUrl,
-      perfil: registroDto.perfil || 'usuario', // Si no recibe perfil usa "usuario"
+      perfil: registroDto.perfil || 'usuario',
       activo: true,
     });
 
-    // Elimina la contraseña del objeto que será enviado al frontend
+    // Quita la contraseña antes de devolver el usuario
     const { password: _password, ...usuarioSinPassword } =
       usuarioCreado.toObject();
 
-    // Evita advertencias de ESLint por variable sin usar
     void _password;
 
+    // Genera un token JWT válido por 15 minutos
+    const token = jwt.sign(
+      {
+        id: usuarioSinPassword._id,
+        correo: usuarioSinPassword.correo,
+        nombreUsuario: usuarioSinPassword.nombreUsuario,
+        perfil: usuarioSinPassword.perfil,
+      },
+      process.env.JWT_SECRET || 'secreto',
+      { expiresIn: '15m' },
+    );
+
+    // Devuelve usuario sin password + token
     return {
       mensaje: 'Usuario registrado correctamente',
+      token,
       usuario: usuarioSinPassword,
     };
   }
 
-  // Inicia sesión de un usuario
+  // Inicia sesión
   async login(loginDto: LoginDto) {
     // Busca por correo o nombre de usuario
     const usuario = await this.usuariosService.buscarPorIdentificador(
@@ -75,16 +91,12 @@ export class AuthService {
       throw new UnauthorizedException('Usuario o contraseña incorrectos');
     }
 
-    // Verifica que el usuario esté habilitado
-    if (!usuario) {
-  throw new UnauthorizedException('Credenciales incorrectas');
-}
+    // Si el usuario está deshabilitado, no puede entrar
+    if (!usuario.activo) {
+      throw new UnauthorizedException('Tu usuario está deshabilitado');
+    }
 
-if (!usuario.activo) {
-  throw new UnauthorizedException('Tu usuario está deshabilitado');
-}
-
-    // Compara la contraseña ingresada con la almacenada en la base de datos
+    // Compara la contraseña ingresada con la encriptada
     const passwordValida = await bcrypt.compare(
       loginDto.password,
       usuario.password,
@@ -94,14 +106,26 @@ if (!usuario.activo) {
       throw new UnauthorizedException('Usuario o contraseña incorrectos');
     }
 
-    // Elimina la contraseña antes de devolver el usuario al frontend
+    // Quita la contraseña antes de responder
     const { password: _password, ...usuarioSinPassword } = usuario.toObject();
 
-    // Evita advertencias de ESLint por variable sin usar
     void _password;
+
+    // Genera token JWT válido por 15 minutos
+    const token = jwt.sign(
+      {
+        id: usuarioSinPassword._id,
+        correo: usuarioSinPassword.correo,
+        nombreUsuario: usuarioSinPassword.nombreUsuario,
+        perfil: usuarioSinPassword.perfil,
+      },
+      process.env.JWT_SECRET || 'secreto',
+      { expiresIn: '15m' },
+    );
 
     return {
       mensaje: 'Login correcto',
+      token,
       usuario: usuarioSinPassword,
     };
   }

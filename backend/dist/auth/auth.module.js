@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
 const usuarios_module_1 = require("../usuarios/usuarios.module");
@@ -17,21 +16,9 @@ let AuthModule = class AuthModule {
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            usuarios_module_1.UsuariosModule,
-            jwt_1.JwtModule.register({
-                secret: process.env.JWT_SECRET || '1164',
-                signOptions: {
-                    expiresIn: '15m',
-                },
-            }),
-        ],
-        controllers: [
-            auth_controller_1.AuthController,
-        ],
-        providers: [
-            auth_service_1.AuthService,
-        ],
+        imports: [usuarios_module_1.UsuariosModule],
+        controllers: [auth_controller_1.AuthController],
+        providers: [auth_service_1.AuthService],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

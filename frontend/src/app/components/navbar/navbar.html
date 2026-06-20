@@ -5,11 +5,17 @@
   </div>
 
   <div class="links" *ngIf="!estaLogueado()">
-    <a routerLink="/login" routerLinkActive="activo">Login</a>
-    <a routerLink="/registro" routerLinkActive="activo">Registro</a>
+    <a routerLink="/login" routerLinkActive="activo">
+      Login
+    </a>
+
+    <a routerLink="/registro" routerLinkActive="activo">
+      Registro
+    </a>
   </div>
 
   <div class="links" *ngIf="estaLogueado()">
+
     <a routerLink="/publicaciones" routerLinkActive="activo">
       Publicaciones
     </a>
@@ -18,8 +24,25 @@
       Mi Perfil
     </a>
 
+    <a
+      *ngIf="esAdmin()"
+      routerLink="/dashboard/usuarios"
+      routerLinkActive="activo"
+    >
+      Usuarios
+    </a>
+
+    <a
+      *ngIf="esAdmin()"
+      routerLink="/dashboard/estadisticas"
+      routerLinkActive="activo"
+    >
+      Estadísticas
+    </a>
+
     <a href="#" (click)="cerrarSesion(); $event.preventDefault()">
       Cerrar Sesión
     </a>
+
   </div>
 </nav>

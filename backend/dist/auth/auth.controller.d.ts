@@ -4,11 +4,20 @@ import { LoginDto } from './dto/login.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    private obtenerToken;
     registrar(registroDto: RegistroDto, file: Express.Multer.File): Promise<{
         mensaje: string;
+        token: string;
         usuario: {
-            _id: unknown;
+            _id: import("mongoose").Types.ObjectId;
+            $locals: Record<string, unknown>;
+            $op: "save" | "validate" | "remove" | null;
+            $where: Record<string, unknown>;
+            baseModelName?: string;
+            collection: import("mongoose").Collection;
+            db: import("mongoose").Connection;
+            errors?: import("mongoose").Error.ValidationError;
+            isNew: boolean;
+            schema: import("mongoose").Schema;
             nombre: string;
             apellido: string;
             correo: string;
@@ -18,31 +27,24 @@ export declare class AuthController {
             imagenPerfil: string;
             perfil: string;
             activo: boolean;
-            password?: string;
+            __v: number;
+            id: string;
         };
-        token: string;
     }>;
     login(loginDto: LoginDto): Promise<{
         mensaje: string;
-        usuario: {
-            _id: unknown;
-            nombre: string;
-            apellido: string;
-            correo: string;
-            nombreUsuario: string;
-            fechaNacimiento: string;
-            descripcion: string;
-            imagenPerfil: string;
-            perfil: string;
-            activo: boolean;
-            password?: string;
-        };
         token: string;
-    }>;
-    autorizar(authorization: string, tokenBody: string): Promise<{
-        mensaje: string;
         usuario: {
-            _id: unknown;
+            _id: import("mongoose").Types.ObjectId;
+            $locals: Record<string, unknown>;
+            $op: "save" | "validate" | "remove" | null;
+            $where: Record<string, unknown>;
+            baseModelName?: string;
+            collection: import("mongoose").Collection;
+            db: import("mongoose").Connection;
+            errors?: import("mongoose").Error.ValidationError;
+            isNew: boolean;
+            schema: import("mongoose").Schema;
             nombre: string;
             apellido: string;
             correo: string;
@@ -52,24 +54,8 @@ export declare class AuthController {
             imagenPerfil: string;
             perfil: string;
             activo: boolean;
-            password?: string;
+            __v: number;
+            id: string;
         };
-    }>;
-    refrescar(authorization: string, tokenBody: string): Promise<{
-        mensaje: string;
-        usuario: {
-            _id: unknown;
-            nombre: string;
-            apellido: string;
-            correo: string;
-            nombreUsuario: string;
-            fechaNacimiento: string;
-            descripcion: string;
-            imagenPerfil: string;
-            perfil: string;
-            activo: boolean;
-            password?: string;
-        };
-        token: string;
     }>;
 }

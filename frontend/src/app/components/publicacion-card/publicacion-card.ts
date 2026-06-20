@@ -1,67 +1,76 @@
-// Módulo con directivas comunes como *ngIf y *ngFor.
 import { CommonModule } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
-// Decoradores y herramientas para comunicación entre componentes.
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ComentariosService } from '../../services/comentarios';
 
 @Component({
-  // Etiqueta HTML que representa este componente.
   selector: 'app-publicacion-card',
-
-  // Módulos utilizados en el HTML.
-  imports: [CommonModule],
-
-  // Archivo HTML asociado.
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './publicacion-card.html',
-
-  // Archivo de estilos asociado.
   styleUrl: './publicacion-card.scss',
 })
 export class PublicacionCard {
-  // Publicación que se mostrará en la tarjeta.
   @Input() publicacion: any;
-
-  // Usuario actualmente logueado.
   @Input() usuarioActual: any;
 
-  // Evento enviado al componente padre cuando se presiona Like.
   @Output() like = new EventEmitter<any>();
-
-  // Evento enviado al componente padre cuando se presiona Eliminar.
   @Output() eliminar = new EventEmitter<any>();
 
-  // Verifica si el usuario actual ya dio like a la publicación.
-  usuarioDioLike(): boolean {
-    // Si no hay usuario o no existen likes, devuelve false.
-    if (!this.usuarioActual || !this.publicacion?.likes) {
-      return false;
-    }
+  mostrarComentarios = false;
+  comentarios: any[] = [];
+  errorComentarios = '';
 
-    // Busca si el id del usuario existe dentro del array de likes.
+  comentarioForm!: FormGroup;
+  editarForm!: FormGroup;
+  comentarioEditando: any = null;
+
+  constructor(
+    private comentariosService: ComentariosService,
+    private fb: FormBuilder,
+  ) {
+    this.comentarioForm = this.fb.group({
+      mensaje: ['', [Validators.required]],
+    });
+
+    this.editarForm = this.fb.group({
+      mensaje: ['', [Validators.required]],
+    });
+  }
+
+  usuarioDioLike(): boolean {
+    if (!this.usuarioActual || !this.publicacion?.likes) return false;
+
     return this.publicacion.likes.some(
       (id: string) => id === this.usuarioActual._id,
     );
   }
 
-  // Verifica si el usuario tiene permisos para eliminar la publicación.
   puedeEliminar(): boolean {
-    // Si no hay usuario o no existe el creador de la publicación, devuelve false.
-    if (!this.usuarioActual || !this.publicacion?.usuario) {
-      return false;
-    }
+    if (!this.usuarioActual || !this.publicacion?.usuario) return false;
 
-    // Permite eliminar si es el dueño o si es administrador.
     return (
       this.publicacion.usuario._id === this.usuarioActual._id ||
       this.usuarioActual.perfil === 'administrador'
     );
   }
 
-  // Formatea fecha y hora de creación de la publicación.
+  puedeEditar(comentario: any): boolean {
+    return comentario.usuario?._id === this.usuarioActual?._id;
+  }
+
   formatearFecha(fecha: string): string {
-    if (!fecha) {
-      return '';
-    }
+    if (!fecha) return '';
 
     return new Date(fecha).toLocaleString('es-AR', {
       day: '2-digit',
@@ -73,13 +82,96 @@ export class PublicacionCard {
     });
   }
 
-  // Emite el evento de like hacia el componente padre.
   clickLike() {
     this.like.emit(this.publicacion);
   }
 
-  // Emite el evento de eliminación hacia el componente padre.
   clickEliminar() {
     this.eliminar.emit(this.publicacion);
+  }
+
+  toggleComentarios() {
+    this.mostrarComentarios = !this.mostrarComentarios;
+
+    if (this.mostrarComentarios && this.comentarios.length === 0) {
+      this.cargarComentarios();
+    }
+  }
+
+  cargarComentarios() {
+    this.errorComentarios = '';
+
+    this.comentariosService
+      .listarComentarios(this.publicacion._id, 0, 5)
+      .subscribe({
+        next: (resp: any) => {
+          this.comentarios = resp.comentarios || [];
+        },
+        error: () => {
+          this.errorComentarios = 'No se pudieron cargar los comentarios.';
+        },
+      });
+  }
+
+  crearComentario() {
+    this.errorComentarios = '';
+
+    if (this.comentarioForm.invalid) {
+      this.errorComentarios = 'Escribí un comentario.';
+      this.comentarioForm.markAllAsTouched();
+      return;
+    }
+
+    this.comentariosService
+      .crearComentario(this.publicacion._id, {
+        mensaje: this.comentarioForm.value.mensaje,
+        usuarioId: this.usuarioActual._id,
+      })
+      .subscribe({
+        next: () => {
+          this.comentarioForm.reset();
+          this.comentarios = [];
+          this.cargarComentarios();
+        },
+        error: (err) => {
+          this.errorComentarios =
+            err.error?.message || 'No se pudo crear el comentario.';
+        },
+      });
+  }
+
+  iniciarEdicion(comentario: any) {
+    this.comentarioEditando = comentario;
+
+    this.editarForm.patchValue({
+      mensaje: comentario.mensaje,
+    });
+  }
+
+  cancelarEdicion() {
+    this.comentarioEditando = null;
+    this.editarForm.reset();
+  }
+
+  guardarEdicion() {
+    if (this.editarForm.invalid || !this.comentarioEditando) return;
+
+    this.comentariosService
+      .editarComentario(this.comentarioEditando._id, {
+        mensaje: this.editarForm.value.mensaje,
+        usuarioId: this.usuarioActual._id,
+      })
+      .subscribe({
+        next: () => {
+          this.comentarioEditando = null;
+          this.editarForm.reset();
+          this.comentarios = [];
+          this.cargarComentarios();
+        },
+        error: (err) => {
+          this.errorComentarios =
+            err.error?.message || 'No se pudo editar el comentario.';
+        },
+      });
   }
 }

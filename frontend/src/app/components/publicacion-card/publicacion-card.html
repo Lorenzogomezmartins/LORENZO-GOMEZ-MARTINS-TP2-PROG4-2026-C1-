@@ -40,6 +40,14 @@
     <span>{{ publicacion.cantidadLikes || 0 }} me gusta</span>
 
     <button
+      type="button"
+      class="btn-ver"
+      (click)="toggleComentarios()"
+    >
+      {{ mostrarComentarios ? 'Ocultar comentarios' : 'Ver comentarios' }}
+    </button>
+
+    <button
       *ngIf="puedeEliminar()"
       type="button"
       class="btn-eliminar"
@@ -48,4 +56,84 @@
       Eliminar
     </button>
   </footer>
+
+  <section class="comentarios" *ngIf="mostrarComentarios">
+    <form
+      class="form-comentario"
+      [formGroup]="comentarioForm"
+      (ngSubmit)="crearComentario()"
+    >
+      <input
+        type="text"
+        placeholder="Escribí un comentario..."
+        formControlName="mensaje"
+      />
+
+      <button type="submit">
+        Comentar
+      </button>
+    </form>
+
+    <p class="error" *ngIf="errorComentarios">
+      {{ errorComentarios }}
+    </p>
+
+    <p
+      class="sin-comentarios"
+      *ngIf="comentarios.length === 0 && !errorComentarios"
+    >
+      No hay comentarios.
+    </p>
+
+    <div
+      class="comentario"
+      *ngFor="let comentario of comentarios"
+    >
+      <strong>
+        {{ comentario.usuario?.nombre }}
+        {{ comentario.usuario?.apellido }}
+      </strong>
+
+      <ng-container *ngIf="comentarioEditando?._id !== comentario._id">
+        <p>{{ comentario.mensaje }}</p>
+
+        <small>
+          {{ formatearFecha(comentario.createdAt) }}
+          <span *ngIf="comentario.modificado"> - comentario editado</span>
+        </small>
+
+        <button
+          *ngIf="puedeEditar(comentario)"
+          type="button"
+          class="btn-editar"
+          (click)="iniciarEdicion(comentario)"
+        >
+          Editar
+        </button>
+      </ng-container>
+
+      <form
+        *ngIf="comentarioEditando?._id === comentario._id"
+        class="form-editar"
+        [formGroup]="editarForm"
+        (ngSubmit)="guardarEdicion()"
+      >
+        <input
+          type="text"
+          formControlName="mensaje"
+        />
+
+        <button type="submit">
+          Guardar
+        </button>
+
+        <button
+          type="button"
+          (click)="cancelarEdicion()"
+        >
+          Cancelar
+        </button>
+      </form>
+    </div>
+  </section>
 </article>
