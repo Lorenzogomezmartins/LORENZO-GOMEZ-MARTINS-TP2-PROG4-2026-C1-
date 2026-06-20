@@ -68,11 +68,7 @@ export class PublicacionesService {
 
     // Realiza la petición DELETE.
     return this.http.delete(`${this.apiUrl}/${publicacionId}`, {
-      headers,   
-    });  
+      headers,
+    });
   }
-  // Obtiene una publicación específica por su ID.
-obtenerPublicacionPorId(id: string) {
-  return this.http.get(`${this.apiUrl}/${id}`);
-}
 }

@@ -21,14 +21,8 @@ import { AuthService } from '../../services/auth';
 @Component({
   // Etiqueta HTML que representa este componente.
   selector: 'app-login',
-
-  // Módulos necesarios para el funcionamiento del HTML.
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-
-  // Archivo HTML asociado.
   templateUrl: './login.html',
-
-  // Archivo de estilos asociado.
   styleUrl: './login.scss',
 })
 export class Login {
@@ -81,12 +75,9 @@ export class Login {
       .subscribe({
         // Si el login es correcto, guarda el usuario y navega a publicaciones.
         next: (resp: any) => {
-  this.authService.guardarSesion(resp.usuario, resp.token);
-
-  window.dispatchEvent(new Event('iniciar-contador-sesion'));
-
-  this.router.navigate(['/publicaciones']);
-},
+          this.authService.guardarUsuario(resp.usuario);
+          this.router.navigate(['/publicaciones']);
+        },
 
         // Si ocurre un error, muestra el mensaje correspondiente.
         error: (err) => {

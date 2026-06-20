@@ -1,101 +1,71 @@
-import { CommonModule } from '@angular/common'; // Módulo común de Angular: permite usar directivas como *ngIf y *ngFor
-import { Component } from '@angular/core'; // Decorador para definir un componente de Angular
+ // Módulo con directivas comunes como *ngIf y *ngFor.
+import { CommonModule } from '@angular/common';
 
-import { AuthService } from '../../services/auth'; // Servicio para obtener los datos del usuario logueado
-import { PublicacionesService } from '../../services/publicaciones'; // Servicio para consultar publicaciones al backend
-import { ComentariosService } from '../../services/comentarios'; // Servicio para consultar comentarios al backend
+// Decorador para definir un componente de Angular.
+import { Component } from '@angular/core';
 
-import { PublicacionCard } from '../../components/publicacion-card/publicacion-card'; // Componente reutilizable para mostrar una publicación
+// Servicio usado para obtener el usuario logueado.
+import { AuthService } from '../../services/auth';
 
-// Define el componente de la página "Mi Perfil"
+// Servicio encargado de comunicarse con el backend de publicaciones.
+import { PublicacionesService } from '../../services/publicaciones';
+
+// Componente reutilizable para mostrar cada publicación.
+import { PublicacionCard } from '../../components/publicacion-card/publicacion-card';
+
 @Component({
-  selector: 'app-mi-perfil', // Nombre de la etiqueta HTML: <app-mi-perfil>
-  imports: [CommonModule, PublicacionCard], // Módulos/componentes que usa este componente standalone
-  templateUrl: './mi-perfil.html', // Archivo HTML asociado
-  styleUrl: './mi-perfil.scss', // Archivo SCSS asociado
+  // Etiqueta HTML que representa esta página.
+  selector: 'app-mi-perfil',
+  imports: [CommonModule, PublicacionCard],
+  templateUrl: './mi-perfil.html',
+  styleUrl: './mi-perfil.scss',
 })
 export class MiPerfil {
+  // Usuario actualmente guardado en localStorage.
   usuarioActual: any;
 
+  // Lista de publicaciones propias del usuario.
   publicaciones: any[] = [];
 
-  misComentarios: any[] = [];
-
-  // Controla qué sección se muestra en pantalla
-  vistaActiva: 'publicaciones' | 'comentarios' = 'publicaciones';
-
-  // Mensaje de error general
+  // Mensaje de error para mostrar en pantalla.
   error = '';
 
-  // Inyección de dependencias
   constructor(
-    private authService: AuthService, // Permite obtener el usuario guardado en localStorage
-    private publicacionesService: PublicacionesService, // Permite traer publicaciones del usuario
-    private comentariosService: ComentariosService, // Permite traer comentarios del usuario
+    private authService: AuthService,
+    private publicacionesService: PublicacionesService,
   ) {
-    // Obtiene el usuario actual desde localStorage
+    // Obtiene el usuario logueado.
     this.usuarioActual = this.authService.obtenerUsuario();
 
-    // Carga las publicaciones propias al iniciar el componente
+    // Carga las publicaciones del usuario al entrar al perfil.
     this.cargarMisPublicaciones();
-
-    // Carga los comentarios propios al iniciar el componente
-    this.cargarMisComentarios();
   }
 
-  // Cambia entre la vista de publicaciones y la vista de comentarios
-  cambiarVista(vista: 'publicaciones' | 'comentarios') {
-    this.vistaActiva = vista;
-  }
-
-  // Carga las publicaciones creadas por el usuario logueado
+  // Carga las publicaciones creadas por el usuario actual.
   cargarMisPublicaciones() {
-    // Si no hay usuario logueado, muestra error y corta el proceso
+    // Si no hay usuario logueado, muestra error y corta la ejecución.
     if (!this.usuarioActual) {
       this.error = 'No hay usuario logueado.';
       return;
     }
 
-    // Llama al backend para listar publicaciones filtradas por usuario
+    // Pide al backend las últimas 3 publicaciones del usuario actual.
     this.publicacionesService
       .listarPublicaciones(
-        'fecha', // Ordena las publicaciones por fecha
-        0, // Offset inicial
-        3, // Trae como máximo 3 publicaciones
-        this.usuarioActual._id, // Filtra por el ID del usuario actual
+        'fecha',
+        0,
+        3,
+        this.usuarioActual._id,
       )
       .subscribe({
-        // Si el backend responde correctamente, guarda las publicaciones
+        // Guarda las publicaciones recibidas.
         next: (resp: any) => {
           this.publicaciones = resp.publicaciones;
         },
 
-        // Si ocurre un error, muestra mensaje
+        // Muestra error si falla la carga.
         error: () => {
           this.error = 'No se pudieron cargar tus publicaciones.';
-        },
-      });
-  }
-
-  // Carga los comentarios realizados por el usuario logueado
-  cargarMisComentarios() {
-    // Si no hay usuario logueado, corta el proceso
-    if (!this.usuarioActual) {
-      return;
-    }
-
-    // Llama al backend para traer los comentarios del usuario
-    this.comentariosService
-      .listarComentariosDeUsuario(this.usuarioActual._id)
-      .subscribe({
-        // Si el backend responde correctamente, guarda los comentarios
-        next: (resp: any) => {
-          this.misComentarios = resp.comentarios;
-        },
-
-        // Si ocurre un error, muestra mensaje
-        error: () => {
-          this.error = 'No se pudieron cargar tus comentarios.';
         },
       });
   }

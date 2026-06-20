@@ -10,40 +10,19 @@
 
     <div class="datos">
       <p><strong>Correo:</strong> {{ usuarioActual.correo }}</p>
-
       <p>
         <strong>Fecha de nacimiento:</strong>
         {{ usuarioActual.fechaNacimiento }}
       </p>
-
       <p><strong>Descripción:</strong> {{ usuarioActual.descripcion }}</p>
-
       <p><strong>Perfil:</strong> {{ usuarioActual.perfil }}</p>
     </div>
   </div>
 
-  <div class="filtros-perfil">
-    <button
-      type="button"
-      [class.activo]="vistaActiva === 'publicaciones'"
-      (click)="cambiarVista('publicaciones')"
-    >
-      Mis publicaciones
-    </button>
-
-    <button
-      type="button"
-      [class.activo]="vistaActiva === 'comentarios'"
-      (click)="cambiarVista('comentarios')"
-    >
-      Mis comentarios
-    </button>
-  </div>
-
-  <p class="error" *ngIf="error">{{ error }}</p>
-
-  <div class="ultimas" *ngIf="vistaActiva === 'publicaciones'">
+  <div class="ultimas">
     <h2>Mis últimas 3 publicaciones</h2>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
 
     <app-publicacion-card
       *ngFor="let publicacion of publicaciones"
@@ -53,40 +32,6 @@
 
     <p *ngIf="publicaciones.length === 0">
       Todavía no realizaste publicaciones.
-    </p>
-  </div>
-
-  <div class="ultimas" *ngIf="vistaActiva === 'comentarios'">
-    <h2>Mis comentarios</h2>
-
-    <article
-  class="comentario-perfil"
-  *ngFor="let comentario of misComentarios"
->
-  <div class="comentario-header">
-    <span class="comentario-publicacion">
-      {{ comentario.publicacion?.titulo }}
-    </span>
-
-    <span class="comentario-fecha">
-      {{ comentario.createdAt | date:'dd/MM/yyyy HH:mm' }}
-    </span>
-  </div>
-
-  <div class="comentario-texto">
-    {{ comentario.mensaje }}
-  </div>
-
-  <span
-    class="comentario-editado"
-    *ngIf="comentario.modificado"
-  >
-    ✏️ Comentario editado
-  </span>
-</article>
-
-    <p *ngIf="misComentarios.length === 0">
-      Todavía no realizaste comentarios.
     </p>
   </div>
 </section>

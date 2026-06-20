@@ -1,160 +1,124 @@
-import { Component } from '@angular/core'; // Decorador para definir un componente de Angular
-import { CommonModule } from '@angular/common'; // Módulo común que permite usar directivas como *ngIf y *ngFor
+// Decorador para definir un componente de Angular.
+import { Component } from '@angular/core';
+
+// Módulo con directivas comunes como *ngIf y *ngFor.
+import { CommonModule } from '@angular/common';
+
+// Herramientas para crear y validar formularios reactivos.
 import {
-  FormBuilder, // Servicio que facilita la creación de formularios reactivos
-  FormGroup, // Tipo que representa un grupo de controles de formulario
-  ReactiveFormsModule, // Módulo necesario para trabajar con formularios reactivos
-  Validators, // Conjunto de validadores propios de Angular
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 
-import { Router } from '@angular/router'; // Servicio para navegar entre rutas
+// Permite navegar entre rutas desde TypeScript.
+import { Router } from '@angular/router';
 
-import { AuthService } from '../../services/auth'; // Servicio del frontend que se comunica con el backend de autenticación
+// Servicio usado para enviar el registro al backend.
+import { AuthService } from '../../services/auth';
 
-// Define este archivo como un componente de Angular
 @Component({
-  selector: 'app-registro', // Nombre de la etiqueta HTML del componente: <app-registro>
-  imports: [CommonModule, ReactiveFormsModule], // Módulos que necesita este componente standalone
-  templateUrl: './registro.html', // Archivo HTML asociado al componente
-  styleUrl: './registro.scss', // Archivo SCSS asociado al componente
+  selector: 'app-registro',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './registro.html',
+  styleUrl: './registro.scss',
 })
 export class Registro {
-  // Guarda la imagen de perfil seleccionada por el usuario
+  // Guarda la imagen elegida por el usuario.
   imagenSeleccionada: File | null = null;
 
- 
+  // Mensaje de éxito para mostrar en pantalla.
   mensaje = '';
 
- 
+  // Mensaje de error para mostrar en pantalla.
   error = '';
 
-  
-  cargando = false;
-
-  
-  modalVisible = false;
-
- 
-  modalTitulo = '';
-
-  
-  modalMensaje = '';
-
-  // Formulario reactivo de registro
+  // Formulario reactivo de registro.
   registroForm!: FormGroup;
 
-  // Inyección de dependencias
   constructor(
-    private fb: FormBuilder, // Permite construir el formulario reactivo
-    private authService: AuthService, // Permite llamar al registro del backend
-    private router: Router, // Permite redirigir al usuario
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
   ) {
-    // Crea el formulario reactivo con sus campos y validaciones
+    // Crea el formulario con sus campos y validaciones.
     this.registroForm = this.fb.group({
-      // Campo nombre obligatorio
       nombre: ['', [Validators.required]],
-
-      // Campo apellido obligatorio
       apellido: ['', [Validators.required]],
-
-      // Campo correo obligatorio y con formato de email
       correo: ['', [Validators.required, Validators.email]],
-
-      // Campo nombre de usuario obligatorio
       nombreUsuario: ['', [Validators.required]],
 
-      // Campo contraseña con varias validaciones
+      // Contraseña obligatoria, mínimo 8 caracteres, una mayúscula y un número.
       password: [
         '',
         [
-          Validators.required, // La contraseña es obligatoria
-          Validators.minLength(8), // Debe tener al menos 8 caracteres
-          Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/), // Debe tener al menos una mayúscula y un número
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/),
         ],
       ],
 
-      // Campo para repetir la contraseña
       repetirPassword: ['', [Validators.required]],
-
-      // Campo fecha de nacimiento obligatorio
       fechaNacimiento: ['', [Validators.required]],
-
-      // Campo descripción obligatorio y máximo 250 caracteres
       descripcion: ['', [Validators.required, Validators.maxLength(250)]],
 
-      // Perfil por defecto del usuario
+      // Por defecto todo usuario registrado tiene perfil "usuario".
       perfil: ['usuario', [Validators.required]],
     });
   }
 
-  // Getter para acceder más fácil al control de contraseña desde el HTML
+  // Devuelve el control de la contraseña para usarlo fácilmente en el HTML.
   get passwordControl() {
     return this.registroForm.get('password');
   }
 
-  // Verifica si la contraseña contiene al menos una letra mayúscula
+  // Verifica si la contraseña tiene al menos una mayúscula.
   tieneMayuscula(password: string): boolean {
     return /[A-Z]/.test(password);
   }
 
-  // Verifica si la contraseña contiene al menos un número
+  // Verifica si la contraseña tiene al menos un número.
   tieneNumero(password: string): boolean {
     return /\d/.test(password);
   }
 
-  // Guarda la imagen seleccionada desde el input type="file"
+  // Guarda el archivo de imagen seleccionado desde el input file.
   seleccionarImagen(event: Event) {
-    // Convierte el target del evento a HTMLInputElement
     const input = event.target as HTMLInputElement;
 
-    // Si hay archivos seleccionados, guarda el primero
+    // Si el usuario eligió un archivo, guarda el primero.
     if (input.files && input.files.length > 0) {
       this.imagenSeleccionada = input.files[0];
     }
   }
 
-  // Muestra el modal con un título y mensaje personalizados
-  mostrarModal(titulo: string, mensaje: string) {
-    this.modalTitulo = titulo; // Asigna el título del modal
-    this.modalMensaje = mensaje; // Asigna el mensaje del modal
-    this.modalVisible = true; // Hace visible el modal
-  }
-
-  // Cierra el modal y redirige al login
-  cerrarModal() {
-    this.modalVisible = false; // Oculta el modal
-    this.router.navigate(['/login']); // Redirige al usuario a la pantalla de login
-  }
-
-  // Ejecuta el registro del usuario
+  // Envía el formulario de registro al backend.
   registrar() {
-    // Limpia mensajes anteriores
+    // Limpia mensajes anteriores.
     this.mensaje = '';
     this.error = '';
 
-    // Si el formulario no cumple las validaciones, se corta el proceso
+    // Si el formulario es inválido, muestra error y marca los campos tocados.
     if (this.registroForm.invalid) {
       this.error = 'Revisá los campos del formulario.';
-
-      // Marca todos los campos como tocados para mostrar errores en el HTML
       this.registroForm.markAllAsTouched();
-
       return;
     }
 
-    // Obtiene todos los valores cargados en el formulario
+    // Obtiene los valores cargados en el formulario.
     const valores = this.registroForm.value;
 
-    // Valida manualmente que ambas contraseñas coincidan
+    // Valida que ambas contraseñas coincidan.
     if (valores.password !== valores.repetirPassword) {
       this.error = 'Las contraseñas no coinciden.';
       return;
     }
 
-    // FormData permite enviar texto + archivos al backend
+    // FormData permite enviar texto e imagen en la misma petición.
     const formData = new FormData();
 
-    // Agrega cada campo del formulario al FormData
+    // Agrega cada campo del formulario al FormData.
     formData.append('nombre', valores.nombre || '');
     formData.append('apellido', valores.apellido || '');
     formData.append('correo', valores.correo || '');
@@ -164,34 +128,24 @@ export class Registro {
     formData.append('descripcion', valores.descripcion || '');
     formData.append('perfil', valores.perfil || 'usuario');
 
-    // Si el usuario seleccionó una imagen, también se agrega al FormData
+    // Si se seleccionó imagen, también se agrega al FormData.
     if (this.imagenSeleccionada) {
       formData.append('imagenPerfil', this.imagenSeleccionada);
     }
 
-    // Activa estado de carga mientras se espera la respuesta del backend
-    this.cargando = true;
-
-    // Llama al AuthService para enviar el registro al backend
+    // Envía los datos al servicio de autenticación.
     this.authService.registrar(formData).subscribe({
-      // Si el backend registra correctamente al usuario
+      // Si el registro sale bien, muestra mensaje y redirige al login.
       next: () => {
-        // Desactiva estado de carga
-        this.cargando = false;
+        this.mensaje = 'Usuario registrado correctamente.';
 
-        // Muestra modal de éxito
-        this.mostrarModal(
-          'Usuario registrado correctamente',
-          'Tu cuenta fue creada. Ahora iniciá sesión para entrar a la red social.',
-        );
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 800);
       },
 
-      // Si ocurre un error desde el backend
+      // Si el backend responde con error, muestra el mensaje correspondiente.
       error: (err) => {
-        // Desactiva estado de carga
-        this.cargando = false;
-
-        // Muestra el mensaje de error enviado por el backend o uno genérico
         this.error =
           err.error?.message || 'No se pudo registrar el usuario.';
       },

@@ -6,17 +6,32 @@ import { Comentario, ComentarioSchema } from './schemas/comentario.schema';
 
 import { PublicacionesController } from './publicaciones.controller';
 import { PublicacionesService } from './publicaciones.service';
-import { ComentariosController } from './comentarios.controller';
-import { ComentariosService } from './comentarios.service';
+
+import { EstadisticasController } from './estadisticas/estadisticas.controller';
+import { EstadisticasService } from './estadisticas/estadisticas.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Publicacion.name, schema: PublicacionSchema },
-      { name: Comentario.name, schema: ComentarioSchema },
+      {
+        name: Publicacion.name,
+        schema: PublicacionSchema,
+      },
+      {
+        name: Comentario.name,
+        schema: ComentarioSchema,
+      },
     ]),
   ],
-  controllers: [PublicacionesController, ComentariosController],
-  providers: [PublicacionesService, ComentariosService],
+
+  controllers: [
+    PublicacionesController,
+    EstadisticasController,
+  ],
+
+  providers: [
+    PublicacionesService,
+    EstadisticasService,
+  ],
 })
 export class PublicacionesModule {}

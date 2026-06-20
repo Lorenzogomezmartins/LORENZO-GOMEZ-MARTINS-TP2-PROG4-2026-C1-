@@ -12,20 +12,13 @@ import {
 } from '@angular/router';
 
 @Component({
-  // Etiqueta HTML que representa este componente.
   selector: 'app-navbar',
-
-  // Módulos y directivas utilizadas en el HTML.
   imports: [
     CommonModule,
     RouterLink,
     RouterLinkActive,
   ],
-
-  // Archivo HTML asociado.
   templateUrl: './navbar.html',
-
-  // Archivo de estilos asociado.
   styleUrl: './navbar.scss',
 })
 export class Navbar {

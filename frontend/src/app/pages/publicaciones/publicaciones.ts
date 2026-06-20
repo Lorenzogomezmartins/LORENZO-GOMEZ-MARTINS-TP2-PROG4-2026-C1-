@@ -22,16 +22,9 @@ import { AuthService } from '../../services/auth';
 import { PublicacionCard } from '../../components/publicacion-card/publicacion-card';
 
 @Component({
-  // Etiqueta HTML que representa este componente.
   selector: 'app-publicaciones',
-
-  // Módulos y componentes que se usan en el HTML.
   imports: [CommonModule, ReactiveFormsModule, PublicacionCard],
-
-  // HTML asociado a esta página.
   templateUrl: './publicaciones.html',
-
-  // Estilos asociados a esta página.
   styleUrl: './publicaciones.scss',
 })
 export class Publicaciones {
