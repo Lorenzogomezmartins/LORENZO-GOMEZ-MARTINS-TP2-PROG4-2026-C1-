@@ -7,7 +7,7 @@ const app_module_1 = require("./app.module");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
-        origin: 'http://localhost:4200',
+        origin: true,
     });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,

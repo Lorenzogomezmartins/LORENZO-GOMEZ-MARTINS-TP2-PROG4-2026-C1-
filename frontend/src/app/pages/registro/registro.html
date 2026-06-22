@@ -7,71 +7,171 @@
       <div class="grid">
         <label>
           Nombre
-          <input type="text" formControlName="nombre" />
-          <span *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid">
+          <input
+            type="text"
+            formControlName="nombre"
+            [class.input-error]="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid"
+          />
+
+          <span *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.hasError('required')">
             El nombre es obligatorio.
+          </span>
+
+          <span *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.hasError('minlength')">
+            El nombre debe tener al menos 2 caracteres.
           </span>
         </label>
 
         <label>
           Apellido
-          <input type="text" formControlName="apellido" />
-          <span *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid">
+          <input
+            type="text"
+            formControlName="apellido"
+            [class.input-error]="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid"
+          />
+
+          <span *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.hasError('required')">
             El apellido es obligatorio.
+          </span>
+
+          <span *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.hasError('minlength')">
+            El apellido debe tener al menos 2 caracteres.
           </span>
         </label>
       </div>
 
       <label>
         Correo
-        <input type="email" formControlName="correo" />
-        <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid">
+        <input
+          type="email"
+          formControlName="correo"
+          [class.input-error]="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid"
+        />
+
+        <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.hasError('required')">
+          El correo es obligatorio.
+        </span>
+
+        <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.hasError('email')">
           Ingresá un correo válido.
         </span>
       </label>
 
       <label>
         Nombre de usuario
-        <input type="text" formControlName="nombreUsuario" />
-        <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.invalid">
+        <input
+          type="text"
+          formControlName="nombreUsuario"
+          [class.input-error]="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.invalid"
+        />
+
+        <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.hasError('required')">
           El nombre de usuario es obligatorio.
+        </span>
+
+        <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.hasError('minlength')">
+          Debe tener al menos 4 caracteres.
+        </span>
+
+        <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.hasError('pattern')">
+          Solo puede tener letras, números y guion bajo.
         </span>
       </label>
 
       <label>
         Contraseña
-        <input type="password" formControlName="password" />
-        <span *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.invalid">
-          Mínimo 8 caracteres, una mayúscula y un número.
+        <input
+          type="password"
+          formControlName="password"
+          [class.input-error]="registroForm.get('password')?.touched && registroForm.get('password')?.invalid"
+        />
+
+        <span *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.hasError('required')">
+          La contraseña es obligatoria.
+        </span>
+
+        <span *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.hasError('minlength')">
+          Debe tener mínimo 8 caracteres.
+        </span>
+
+        <span *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.hasError('pattern')">
+          Debe tener al menos una mayúscula y un número.
         </span>
       </label>
 
       <label>
         Repetir contraseña
-        <input type="password" formControlName="repetirPassword" />
+        <input
+          type="password"
+          formControlName="repetirPassword"
+          [class.input-error]="registroForm.get('repetirPassword')?.touched && registroForm.get('repetirPassword')?.invalid"
+        />
+
+        <span *ngIf="registroForm.get('repetirPassword')?.touched && registroForm.get('repetirPassword')?.hasError('required')">
+          Tenés que repetir la contraseña.
+        </span>
+
+        <span *ngIf="registroForm.get('repetirPassword')?.touched && registroForm.get('repetirPassword')?.hasError('noCoincide')">
+          Las contraseñas no coinciden.
+        </span>
       </label>
 
       <label>
         Fecha de nacimiento
-        <input type="date" formControlName="fechaNacimiento" />
+        <input
+          type="date"
+          formControlName="fechaNacimiento"
+          [class.input-error]="registroForm.get('fechaNacimiento')?.touched && registroForm.get('fechaNacimiento')?.invalid"
+        />
+
+        <span *ngIf="registroForm.get('fechaNacimiento')?.touched && registroForm.get('fechaNacimiento')?.invalid">
+          La fecha de nacimiento es obligatoria.
+        </span>
       </label>
 
       <label>
         Descripción breve
-        <textarea formControlName="descripcion" rows="3"></textarea>
+        <textarea
+          formControlName="descripcion"
+          rows="3"
+          [class.input-error]="registroForm.get('descripcion')?.touched && registroForm.get('descripcion')?.invalid"
+        ></textarea>
+
+        <span *ngIf="registroForm.get('descripcion')?.touched && registroForm.get('descripcion')?.hasError('required')">
+          La descripción es obligatoria.
+        </span>
+
+        <span *ngIf="registroForm.get('descripcion')?.touched && registroForm.get('descripcion')?.hasError('minlength')">
+          Debe tener al menos 10 caracteres.
+        </span>
+
+        <span *ngIf="registroForm.get('descripcion')?.touched && registroForm.get('descripcion')?.hasError('maxlength')">
+          Máximo 250 caracteres.
+        </span>
       </label>
 
       <label>
         Imagen de perfil
-        <input type="file" accept="image/*" (change)="seleccionarImagen($event)" />
+        <input
+          type="file"
+          accept="image/*"
+          (change)="seleccionarImagen($event)"
+        />
       </label>
 
       <label>
         Perfil
-        <select formControlName="perfil">
+        <select
+          formControlName="perfil"
+          [class.input-error]="registroForm.get('perfil')?.touched && registroForm.get('perfil')?.invalid"
+        >
           <option value="usuario">Usuario</option>
           <option value="administrador">Administrador</option>
         </select>
+
+        <span *ngIf="registroForm.get('perfil')?.touched && registroForm.get('perfil')?.invalid">
+          El perfil es obligatorio.
+        </span>
       </label>
 
       <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>

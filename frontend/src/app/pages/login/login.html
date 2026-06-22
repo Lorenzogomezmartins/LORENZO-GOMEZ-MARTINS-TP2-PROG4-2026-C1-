@@ -1,27 +1,83 @@
 <section class="page">
   <div class="card">
-    
     <h1>Iniciar sesión</h1>
     <p class="subtitle">Entrá con tu correo o nombre de usuario.</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="ingresar()">
       <label>
         Correo o nombre de usuario
-        <input type="text" formControlName="identificador" />
-        <span *ngIf="loginForm.get('identificador')?.touched && loginForm.get('identificador')?.invalid">
+
+        <input
+          type="text"
+          formControlName="identificador"
+          [class.input-error]="
+            loginForm.get('identificador')?.touched &&
+            loginForm.get('identificador')?.invalid
+          "
+        />
+
+        <span
+          *ngIf="
+            loginForm.get('identificador')?.touched &&
+            loginForm.get('identificador')?.hasError('required')
+          "
+        >
           Este campo es obligatorio.
+        </span>
+
+        <span
+          *ngIf="
+            loginForm.get('identificador')?.touched &&
+            loginForm.get('identificador')?.hasError('minlength')
+          "
+        >
+          Debe tener al menos 3 caracteres.
         </span>
       </label>
 
       <label>
         Contraseña
-        <input type="password" formControlName="password" />
-        <span *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-          Mínimo 8 caracteres, una mayúscula y un número.
+
+        <input
+          type="password"
+          formControlName="password"
+          [class.input-error]="
+            loginForm.get('password')?.touched &&
+            loginForm.get('password')?.invalid
+          "
+        />
+
+        <span
+          *ngIf="
+            loginForm.get('password')?.touched &&
+            loginForm.get('password')?.hasError('required')
+          "
+        >
+          La contraseña es obligatoria.
+        </span>
+
+        <span
+          *ngIf="
+            loginForm.get('password')?.touched &&
+            loginForm.get('password')?.hasError('minlength')
+          "
+        >
+          Debe tener mínimo 8 caracteres.
+        </span>
+
+        <span
+          *ngIf="
+            loginForm.get('password')?.touched &&
+            loginForm.get('password')?.hasError('pattern')
+          "
+        >
+          Debe contener una mayúscula y un número.
         </span>
       </label>
 
-      <p class="error" *ngIf="error">{{ error }}</p>
+      <p class="error" *ngIf="error">
+        {{ error }}
+      </p>
 
       <button type="submit">Ingresar</button>
     </form>
