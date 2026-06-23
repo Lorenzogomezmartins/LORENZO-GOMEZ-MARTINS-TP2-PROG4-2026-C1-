@@ -10,7 +10,6 @@ import { Injectable } from '@angular/core';
 })
 export class PublicacionesService {
 
-  // URL base del módulo de publicaciones del backend.
 private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/publicaciones';
 
   // Inyección de HttpClient para realizar peticiones HTTP.

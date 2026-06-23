@@ -27,7 +27,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Habilita peticiones desde el frontend Angular
- app.enableCors({
+app.enableCors({
   origin: [
     'http://localhost:4200',
     'https://redsocial-frontend-4c2h.onrender.com',
