@@ -27,10 +27,13 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Habilita peticiones desde el frontend Angular
-  app.enableCors({
-    origin: 'http://localhost:4200',
-    credentials: true, // Permite enviar cookies y headers de autenticación
-  });
+ app.enableCors({
+  origin: [
+    'http://localhost:4200',
+    'https://redsocial-frontend-4c2h.onrender.com',
+  ],
+  credentials: true,
+});
 
   // Configura validaciones globales para todos los DTO
   app.useGlobalPipes(
