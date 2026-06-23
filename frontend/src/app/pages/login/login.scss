@@ -3,9 +3,36 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 16px;
+  gap: 120px;
+  padding: 40px;
   background: linear-gradient(135deg, #dbeafe, #eff6ff);
 }
+
+/* ==========================
+   TEXTO IZQUIERDA
+========================== */
+
+.welcome {
+  max-width: 700px;
+}
+
+.welcome h2 {
+  margin: 0 0 24px;
+  font-size: 60px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.05;
+}
+
+.welcome p {
+  font-size: 20px;
+  line-height: 1.8;
+  color: #4b5563;
+}
+
+/* ==========================
+   LOGIN
+========================== */
 
 .card {
   width: 100%;
@@ -40,8 +67,13 @@ input {
   border-radius: 12px;
   padding: 12px;
   font-size: 15px;
+  transition: border-color 0.2s;
 }
 
+input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
 
 span,
 .error {
@@ -58,6 +90,7 @@ button {
   border-radius: 14px;
   font-weight: 700;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 button:hover {
@@ -67,4 +100,34 @@ button:hover {
 .link {
   text-align: center;
   margin-top: 18px;
+}
+
+.link a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 1000px) {
+  .page {
+    flex-direction: column;
+    gap: 50px;
+    text-align: center;
+  }
+
+  .welcome {
+    max-width: 100%;
+  }
+
+  .welcome h2 {
+    font-size: 42px;
+  }
+
+  .welcome p {
+    font-size: 18px;
+  }
 }

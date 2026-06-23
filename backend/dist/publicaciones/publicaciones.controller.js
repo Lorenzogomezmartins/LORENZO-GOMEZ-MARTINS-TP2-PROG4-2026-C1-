@@ -26,7 +26,7 @@ let PublicacionesController = class PublicacionesController {
     }
     crearPublicacion(crearPublicacionDto, imagen) {
         const imagenUrl = imagen
-            ? `http://localhost:3000/uploads/publicaciones/${imagen.filename}`
+            ? `https://redsocial-backend-fy2b.onrender.com/uploads/publicaciones/${imagen.filename}`
             : '';
         return this.publicacionesService.crearPublicacion(crearPublicacionDto, imagenUrl);
     }

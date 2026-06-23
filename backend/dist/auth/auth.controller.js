@@ -27,7 +27,7 @@ let AuthController = class AuthController {
     }
     registrar(registroDto, file) {
         const imagenPerfilUrl = file
-            ? `http://localhost:3000/uploads/${file.filename}`
+            ? `https://redsocial-backend-fy2b.onrender.com/uploads/${file.filename}`
             : '';
         return this.authService.registrar(registroDto, imagenPerfilUrl);
     }
