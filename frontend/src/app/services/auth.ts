@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 export class AuthService {
 
   // URL base de los endpoints de autenticación del backend.
-  private apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/auth';
 
   // Inyección de HttpClient para realizar peticiones HTTP.
   constructor(private http: HttpClient) {}
