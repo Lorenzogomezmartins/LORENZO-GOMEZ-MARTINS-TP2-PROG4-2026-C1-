@@ -76,7 +76,38 @@ La aplicación permite a los usuarios registrarse, iniciar sesión, administrar 
 
 # Sprint #2
 
-Pendiente.
+## Frontend
+
+- Implementación de la página Publicaciones.
+- Creación del componente PublicacionCard.
+- Creación de publicaciones con imagen opcional.
+- Ordenamiento de publicaciones por:
+  - Fecha.
+  - Cantidad de me gusta.
+- Paginación de publicaciones.
+- Sistema de me gusta.
+- Eliminación de publicaciones propias.
+- Implementación de la pantalla Mi Perfil.
+- Visualización de datos del usuario.
+- Visualización de las últimas 3 publicaciones del usuario.
+
+## Backend
+
+- Creación del Schema de Publicaciones.
+- Creación del módulo Publicaciones.
+- Alta de publicaciones.
+- Baja lógica de publicaciones.
+- Listado de publicaciones.
+- Filtrado de publicaciones por usuario.
+- Ordenamiento por fecha o cantidad de me gusta.
+- Paginación mediante offset y limit.
+- Sistema de me gusta.
+- Relación entre usuarios y publicaciones.
+- Integración con MongoDB.
+
+---
+
+
 
 ---
 
