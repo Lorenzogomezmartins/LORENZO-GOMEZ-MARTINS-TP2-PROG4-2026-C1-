@@ -123,12 +123,4 @@ Pendiente.
 
 ---
 
-# Sprint #5
 
-Pendiente.
-
----
-
-# Sprint #6
-
-Pendiente.
