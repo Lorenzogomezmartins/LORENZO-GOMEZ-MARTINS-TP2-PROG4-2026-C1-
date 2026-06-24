@@ -47,7 +47,7 @@ export class PublicacionesController {
   ) {
     // Si se subió imagen, arma la URL pública; si no, queda vacío
     const imagenUrl = imagen
-      ? `http://localhost:3000/uploads/publicaciones/${imagen.filename}`
+      ? `https://redsocial-backend-fy2b.onrender.com/uploads/publicaciones/${imagen.filename}`
       : '';
 
     // Envía los datos al service para crear la publicación

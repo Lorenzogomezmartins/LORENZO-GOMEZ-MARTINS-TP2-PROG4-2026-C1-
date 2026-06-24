@@ -10,8 +10,7 @@ import { Injectable } from '@angular/core';
 })
 export class PublicacionesService {
 
-  // URL base del módulo de publicaciones del backend.
-  private apiUrl = 'http://localhost:3000/publicaciones';
+private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/publicaciones';
 
   // Inyección de HttpClient para realizar peticiones HTTP.
   constructor(private http: HttpClient) {}
@@ -68,11 +67,7 @@ export class PublicacionesService {
 
     // Realiza la petición DELETE.
     return this.http.delete(`${this.apiUrl}/${publicacionId}`, {
-      headers,   
-    });  
+      headers,
+    });
   }
-  // Obtiene una publicación específica por su ID.
-obtenerPublicacionPorId(id: string) {
-  return this.http.get(`${this.apiUrl}/${id}`);
-}
 }

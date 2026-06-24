@@ -1,10 +1,23 @@
 <section class="page">
+
+  <!-- TEXTO IZQUIERDA -->
+  <div class="welcome">
+    <h2>BIENVENIDO A RED SOCIAL</h2>
+
+    <p>
+  Compartí publicaciones, comentá, interactuá con otros usuarios y
+  descubrí contenido en una comunidad simple y dinámica.
+</p>
+  </div>
+
+  <!-- LOGIN DERECHA -->
   <div class="card">
-    
+
     <h1>Iniciar sesión</h1>
     <p class="subtitle">Entrá con tu correo o nombre de usuario.</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="ingresar()">
+
       <label>
         Correo o nombre de usuario
         <input type="text" formControlName="identificador" />
@@ -24,11 +37,14 @@
       <p class="error" *ngIf="error">{{ error }}</p>
 
       <button type="submit">Ingresar</button>
+
     </form>
 
     <p class="link">
       ¿No tenés cuenta?
       <a routerLink="/registro">Registrate</a>
     </p>
+
   </div>
+
 </section>

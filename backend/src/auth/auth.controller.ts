@@ -75,7 +75,7 @@ export class AuthController {
     // Si el usuario subió una imagen, se arma la URL pública para acceder a ella
     // Si no subió imagen, se guarda un string vacío
     const imagenPerfilUrl = file
-      ? `http://localhost:3000/uploads/${file.filename}`
+      ? `https://redsocial-backend-fy2b.onrender.com/uploads/${file.filename}`
       : '';
 
     // Llama al servicio para registrar el usuario
