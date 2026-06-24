@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core'; // Permite que el servicio pueda ser
 export class ComentariosService {
 
   // URL base del módulo de comentarios en el backend
-  private apiUrl = 'http://localhost:3000/publicaciones';
+ private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/publicaciones';
 
   // Inyección de dependencias de HttpClient
   constructor(private http: HttpClient) {}
