@@ -1,110 +1,307 @@
 .publicaciones-page {
   min-height: 100vh;
-  background: #f3f4f6;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(37, 99, 235, 0.08),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(96, 165, 250, 0.08),
+      transparent 25%
+    ),
+    #f8fafc;
+
   padding: 40px 16px;
 
   .contenedor {
-    max-width: 850px;
+    max-width: 900px;
     margin: auto;
   }
 
   h1 {
     text-align: center;
-    color: #111827;
-    margin-bottom: 24px;
+    color: #0f172a;
+
+    margin-bottom: 36px;
+
+    font-size: 48px;
+    font-weight: 900;
+
+    letter-spacing: -2px;
+  }
+
+  h1::after {
+    content: '';
+
+    display: block;
+
+    width: 80px;
+    height: 5px;
+
+    margin: 12px auto 0;
+
+    background: #2563eb;
+
+    border-radius: 999px;
   }
 
   .form-publicacion {
+    position: relative;
+
+    max-width: 750px;
+    margin: 0 auto 36px;
+
     background: white;
-    padding: 22px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
-    margin-bottom: 24px;
 
-    h2 {
-      margin-top: 0;
-      color: #111827;
-    }
+    padding: 28px;
 
-    input,
-    textarea {
-      width: 100%;
-      margin-bottom: 12px;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 12px;
-      font-size: 15px;
-    }
+    border-radius: 28px;
 
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
+    border: 1px solid #dbeafe;
 
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 11px 18px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 700;
-    }
+    box-shadow:
+      0 15px 35px rgba(15, 23, 42, 0.08);
   }
 
-  .filtros {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 22px;
+  .form-publicacion::before {
+    content: '';
 
-    button {
-      border: none;
-      padding: 10px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      background: #e5e7eb;
-      font-weight: 700;
-    }
+    position: absolute;
 
-    .activo {
-      background: #2563eb;
-      color: white;
-    }
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 6px;
+
+    background: linear-gradient(
+      90deg,
+      #2563eb,
+      #60a5fa
+    );
+
+    border-radius: 28px 28px 0 0;
   }
 
-  .paginacion {
+  .form-publicacion h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    color: #111827;
+
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .form-publicacion input,
+  .form-publicacion textarea {
+    width: 100%;
+
+    margin-bottom: 14px;
+
+    padding: 14px 16px;
+
+    background: #f8fafc;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+  }
+
+  .form-publicacion input:focus,
+  .form-publicacion textarea:focus {
+    outline: none;
+
+    background: white;
+
+    border-color: #2563eb;
+
+    box-shadow:
+      0 0 0 4px rgba(37, 99, 235, 0.12);
+  }
+
+  .form-publicacion textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .acciones-publicacion {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    margin-top: 22px;
 
-    button {
-      border: none;
-      padding: 10px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      background: #111827;
-      color: white;
-      font-weight: 700;
-    }
+    gap: 16px;
 
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    flex-wrap: wrap;
+  }
+
+  .form-publicacion button {
+    border: none;
+
+    background: linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
+
+    color: white;
+
+    padding: 12px 26px;
+
+    border-radius: 999px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+      0 10px 20px rgba(37, 99, 235, 0.2);
+
+    transition: 0.2s;
+  }
+
+  .form-publicacion button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 14px 24px rgba(37, 99, 235, 0.25);
   }
 
   .mensaje {
     color: #16a34a;
     font-weight: 700;
     text-align: center;
+    margin-bottom: 16px;
   }
 
   .error {
     color: #dc2626;
     font-weight: 700;
     text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .filtros {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 34px;
+  }
+
+  .filtros button {
+    min-width: 160px;
+
+    border: 2px solid #dbeafe;
+
+    background: white;
+
+    padding: 12px 18px;
+
+    border-radius: 999px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.05);
+
+    transition: 0.2s;
+  }
+
+  .filtros button:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+  }
+
+  .filtros .activo {
+    background: #2563eb;
+    color: white;
+
+    border-color: #2563eb;
+
+    box-shadow:
+      0 8px 18px rgba(37, 99, 235, 0.2);
+  }
+
+  .lista-publicaciones {
+    max-width: 800px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 24px;
+  }
+
+  .paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 16px;
+
+    margin-top: 36px;
+  }
+
+  .paginacion span {
+    font-weight: 700;
+    color: #374151;
+  }
+
+  .paginacion button {
+    border: none;
+
+    background: #111827;
+    color: white;
+
+    padding: 10px 18px;
+
+    border-radius: 999px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+  }
+
+  .paginacion button:hover:not(:disabled) {
+    background: #2563eb;
+  }
+
+  .paginacion button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 768px) {
+  .publicaciones-page {
+    h1 {
+      font-size: 38px;
+    }
+
+    .form-publicacion {
+      padding: 20px;
+    }
+
+    .acciones-publicacion {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .acciones-publicacion button {
+      width: 100%;
+    }
   }
 }

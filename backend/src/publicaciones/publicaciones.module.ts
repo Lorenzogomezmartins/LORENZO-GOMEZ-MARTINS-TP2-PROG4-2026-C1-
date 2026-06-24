@@ -1,22 +1,22 @@
-import { Module } from '@nestjs/common'; // Decorador para definir módulos de NestJS
-import { MongooseModule } from '@nestjs/mongoose'; // Permite registrar modelos de MongoDB
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
-import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema'; // Entidad y esquema de publicaciones
-import { PublicacionesController } from './publicaciones.controller'; // Controlador de publicaciones
-import { PublicacionesService } from './publicaciones.service'; // Servicio con la lógica de negocio
+import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema';
+import { Comentario, ComentarioSchema } from './schemas/comentario.schema';
+
+import { PublicacionesController } from './publicaciones.controller';
+import { PublicacionesService } from './publicaciones.service';
+import { ComentariosController } from './comentarios.controller';
+import { ComentariosService } from './comentarios.service';
 
 @Module({
   imports: [
-    // Registra el modelo Publicacion para poder inyectarlo mediante @InjectModel()
     MongooseModule.forFeature([
       { name: Publicacion.name, schema: PublicacionSchema },
+      { name: Comentario.name, schema: ComentarioSchema },
     ]),
   ],
-
-  // Controladores pertenecientes a este módulo
-  controllers: [PublicacionesController],
-
-  // Servicios disponibles dentro de este módulo
-  providers: [PublicacionesService],
+  controllers: [PublicacionesController, ComentariosController],
+  providers: [PublicacionesService, ComentariosService],
 })
 export class PublicacionesModule {}

@@ -11,9 +11,7 @@
         {{ publicacion.usuario?.apellido }}
       </h4>
 
-      <span>
-        @{{ publicacion.usuario?.nombreUsuario }}
-      </span>
+      <span>@{{ publicacion.usuario?.nombreUsuario }}</span>
 
       <div class="fecha-publicacion">
         {{ formatearFecha(publicacion.createdAt) }}
@@ -23,7 +21,7 @@
 
   <h3>{{ publicacion.titulo }}</h3>
 
-  <p>{{ publicacion.descripcion }}</p>
+  <p class="descripcion">{{ publicacion.descripcion }}</p>
 
   <img
     *ngIf="publicacion.imagen"
@@ -39,6 +37,10 @@
 
     <span>{{ publicacion.cantidadLikes || 0 }} me gusta</span>
 
+    <button type="button" class="btn-comentarios" (click)="abrirCerrarComentarios()">
+      {{ comentariosAbiertos ? 'Ocultar comentarios' : 'Ver comentarios' }}
+    </button>
+
     <button
       *ngIf="puedeEliminar()"
       type="button"
@@ -48,4 +50,88 @@
       Eliminar
     </button>
   </footer>
+
+  <section class="comentarios-card" *ngIf="comentariosAbiertos">
+    <h4>Comentarios</h4>
+
+    <div class="form-comentario">
+      <textarea
+        [(ngModel)]="nuevoComentario"
+        placeholder="Escribí un comentario..."
+      ></textarea>
+
+      <button type="button" (click)="crearComentario()">
+        Comentar
+      </button>
+    </div>
+
+    <p class="error" *ngIf="errorComentarios">
+      {{ errorComentarios }}
+    </p>
+
+    <article class="comentario" *ngFor="let comentario of comentarios">
+      <div class="comentario-header">
+        <img
+          [src]="comentario.usuario?.imagenPerfil || 'assets/avatar-default.png'"
+          alt="Foto de perfil"
+        />
+
+        <div>
+          <strong>
+            {{ comentario.usuario?.nombre }}
+            {{ comentario.usuario?.apellido }}
+          </strong>
+
+          <span>
+            @{{ comentario.usuario?.nombreUsuario }} ·
+            {{ formatearFecha(comentario.createdAt) }}
+          </span>
+
+          <small *ngIf="comentario.modificado">
+            Comentario editado
+          </small>
+        </div>
+      </div>
+
+      <p *ngIf="comentarioEditandoId !== comentario._id">
+        {{ comentario.mensaje }}
+      </p>
+
+      <div class="editar-comentario" *ngIf="comentarioEditandoId === comentario._id">
+        <textarea [(ngModel)]="textoEditado"></textarea>
+
+        <div>
+          <button type="button" (click)="guardarEdicion(comentario)">
+            Guardar
+          </button>
+
+          <button type="button" class="btn-secundario" (click)="cancelarEdicion()">
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      <button
+        *ngIf="puedeEditar(comentario) && comentarioEditandoId !== comentario._id"
+        type="button"
+        class="btn-editar"
+        (click)="iniciarEdicion(comentario)"
+      >
+        Editar
+      </button>
+    </article>
+
+    <button
+      type="button"
+      class="btn-cargar"
+      *ngIf="comentarios.length < totalComentarios"
+      (click)="cargarMasComentarios()"
+    >
+      Cargar más comentarios
+    </button>
+
+    <p class="sin-comentarios" *ngIf="comentarios.length === 0">
+      Todavía no hay comentarios.
+    </p>
+  </section>
 </article>

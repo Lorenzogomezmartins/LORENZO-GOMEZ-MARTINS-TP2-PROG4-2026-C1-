@@ -1,0 +1,136 @@
+.card-publicacion {
+  background: #ffffff;
+  border: 3px solid #60a5fa;
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 28px;
+
+  box-shadow:
+    0 10px 26px rgba(37, 99, 235, 0.16),
+    0 18px 42px rgba(15, 23, 42, 0.1);
+
+  transition: 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: #2563eb;
+  }
+
+  .autor {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #e5e7eb;
+
+    img {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e5e7eb;
+      border: 3px solid #2563eb;
+    }
+
+    h4 {
+      margin: 0;
+      color: #111827;
+      font-size: 17px;
+    }
+
+    span {
+      color: #2563eb;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .fecha-publicacion {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+      font-style: italic;
+    }
+  }
+
+  h3 {
+    margin: 12px 0 10px;
+    color: #111827;
+    font-size: 24px;
+  }
+
+  p {
+    color: #374151;
+    line-height: 1.6;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .imagen-publicacion {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-top: 12px;
+    border: 2px solid #e5e7eb;
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 2px solid #e5e7eb;
+    flex-wrap: wrap;
+
+    button,
+    .btn-detalle {
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      font-size: 14px;
+    }
+
+    button {
+      background: #2563eb;
+
+      &:hover {
+        background: #1d4ed8;
+      }
+    }
+
+    .btn-detalle {
+      background: #111827;
+
+      &:hover {
+        background: #1f2937;
+      }
+    }
+
+    .btn-eliminar {
+      background: #dc2626;
+
+      &:hover {
+        background: #b91c1c;
+      }
+    }
+
+    span {
+      color: #374151;
+      font-weight: 800;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+  }
+}

@@ -1,2 +1,31 @@
 <app-navbar></app-navbar>
+
 <router-outlet></router-outlet>
+
+<div class="modal-fondo" *ngIf="modalSesionVisible">
+  <div class="modal-sesion">
+    <h2>Tu sesión está por vencer</h2>
+
+    <p>
+  Tu sesión está próxima a vencer.
+  ¿Deseás extenderla para continuar utilizando la aplicación?
+</p>
+
+    <div class="acciones">
+      <button
+        type="button"
+        (click)="extenderSesion()"
+      >
+        Extender sesión
+      </button>
+
+      <button
+        type="button"
+        class="btn-secundario"
+        (click)="noExtenderSesion()"
+      >
+        Continuar sin extender
+      </button>
+    </div>
+  </div>
+</div>

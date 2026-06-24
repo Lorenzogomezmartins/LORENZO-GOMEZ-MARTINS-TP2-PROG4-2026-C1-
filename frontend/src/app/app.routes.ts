@@ -1,49 +1,39 @@
-// Tipo utilizado por Angular para definir las rutas de la aplicación.
 import { Routes } from '@angular/router';
 
-// Componentes asociados a cada página.
 import { Login } from './pages/login/login';
 import { Registro } from './pages/registro/registro';
 import { Publicaciones } from './pages/publicaciones/publicaciones';
 import { MiPerfil } from './pages/mi-perfil/mi-perfil';
+import { PublicacionDetalle } from './pages/publicacion-detalle/publicacion-detalle';
+import { Cargando } from './components/cargando/cargando';
 
-// Definición de las rutas de la aplicación.
 export const routes: Routes = [
   {
-    // Ruta inicial de la aplicación.
     path: '',
-
-    // Redirige automáticamente al login.
-    redirectTo: 'login',
-
-    // La ruta debe coincidir exactamente con ''.
-    pathMatch: 'full',
+    component: Cargando,
   },
   {
-    // Ruta para la pantalla de inicio de sesión.
     path: 'login',
     component: Login,
   },
   {
-    // Ruta para la pantalla de registro.
     path: 'registro',
     component: Registro,
   },
   {
-    // Ruta para visualizar publicaciones.
     path: 'publicaciones',
     component: Publicaciones,
   },
   {
-    // Ruta para visualizar el perfil del usuario.
+    path: 'publicacion/:id',
+    component: PublicacionDetalle,
+  },
+  {
     path: 'mi-perfil',
     component: MiPerfil,
   },
   {
-    // Captura cualquier ruta inexistente.
     path: '**',
-
-    // Redirige al login si la URL no existe.
-    redirectTo: 'login',
+    redirectTo: '',
   },
 ];
