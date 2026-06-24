@@ -9,8 +9,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class PublicacionesService {
-
-private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/publicaciones';
+  private apiUrl =
+    'https://redsocial-backend-fy2b.onrender.com/publicaciones';
 
   // Inyección de HttpClient para realizar peticiones HTTP.
   constructor(private http: HttpClient) {}
@@ -22,16 +22,18 @@ private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/publicaciones';
     limit = 5,
     usuarioId?: string,
   ) {
-    // Construye la URL con parámetros de consulta.
     let url = `${this.apiUrl}?orden=${orden}&offset=${offset}&limit=${limit}`;
 
-    // Si se recibe un usuarioId, agrega el filtro a la URL.
     if (usuarioId) {
       url += `&usuarioId=${usuarioId}`;
     }
 
-    // Realiza una petición GET para obtener las publicaciones.
     return this.http.get(url);
+  }
+
+  // Obtiene una publicación por ID.
+  obtenerPublicacionPorId(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
   // Crea una nueva publicación.
@@ -59,13 +61,11 @@ private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/publicaciones';
     usuarioId: string,
     perfil: string,
   ) {
-    // Crea los headers necesarios para validar permisos en el backend.
     const headers = new HttpHeaders({
       'usuario-id': usuarioId,
       'usuario-perfil': perfil,
     });
 
-    // Realiza la petición DELETE.
     return this.http.delete(`${this.apiUrl}/${publicacionId}`, {
       headers,
     });
