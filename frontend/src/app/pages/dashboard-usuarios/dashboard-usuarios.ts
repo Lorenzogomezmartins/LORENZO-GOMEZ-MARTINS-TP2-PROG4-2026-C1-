@@ -36,13 +36,10 @@ import { DeshabilitadoOpacoDirective } from '../../directives/deshabilitado-opac
 export class DashboardUsuarios implements OnInit {
   // Lista de usuarios obtenida desde el backend
   usuarios: any[] = [];
-
   // Mensaje de éxito
   mensaje = '';
-
   // Mensaje de error
   error = '';
-
   // Formulario para crear usuarios desde admin
   form!: FormGroup;
 
