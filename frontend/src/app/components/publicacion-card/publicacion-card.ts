@@ -46,20 +46,22 @@ export class PublicacionCard {
 
   // Verifica si el usuario actual puede eliminar esta publicación
   puedeEliminar(): boolean {
-    // Si no hay usuario logueado o la publicación no tiene usuario autor, devuelve false
-    if (!this.usuarioActual || !this.publicacion?.usuario) {
-      return false;
-    }
-
-    // Puede eliminar si:
-    // 1) Es el autor de la publicación
-    // 2) Tiene perfil de administrador
-    return (
-      this.publicacion.usuario._id === this.usuarioActual._id ||
-      this.usuarioActual.perfil === 'administrador'
-    );
+  if (!this.usuarioActual || !this.publicacion?.usuario) {
+    return false;
   }
 
+  const idUsuarioActual = this.usuarioActual._id;
+  const idAutorPublicacion =
+    this.publicacion.usuario._id || this.publicacion.usuario;
+
+  const perfil = this.usuarioActual.perfil || this.usuarioActual.rol;
+
+  return (
+    idAutorPublicacion === idUsuarioActual ||
+    perfil === 'administrador' ||
+    perfil === 'admin'
+  );
+}
   // Verifica si el usuario actual puede editar un comentario
   puedeEditar(comentario: any): boolean {
     // Solo puede editar el comentario quien lo escribió
