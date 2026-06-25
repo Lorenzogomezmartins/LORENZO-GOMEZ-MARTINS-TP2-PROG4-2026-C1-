@@ -19,22 +19,14 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
-  // Etiqueta HTML que representa este componente.
   selector: 'app-login',
-
-  // Módulos necesarios para el funcionamiento del HTML.
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-
-  // Archivo HTML asociado.
   templateUrl: './login.html',
-
-  // Archivo de estilos asociado.
   styleUrl: './login.scss',
 })
 export class Login {
   // Mensaje de error mostrado en pantalla.
   error = '';
-
   // Formulario reactivo de login.
   loginForm!: FormGroup;
 

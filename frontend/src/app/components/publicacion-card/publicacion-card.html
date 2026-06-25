@@ -31,15 +31,30 @@
   />
 
   <footer>
-    <button type="button" (click)="clickLike()">
-      {{ usuarioDioLike() ? 'Quitar me gusta' : 'Me gusta' }}
+    <button
+      type="button"
+      class="btn-like"
+      [class.like-activo]="usuarioDioLike()"
+      (click)="clickLike()"
+    >
+      {{ usuarioDioLike() ? '💔 Quitar' : '❤️ Me gusta' }}
     </button>
 
-    <span>{{ publicacion.cantidadLikes || 0 }} me gusta</span>
+    <span class="contador-like">
+      {{ publicacion.cantidadLikes || 0 }} ❤️
+    </span>
 
-    <button type="button" class="btn-comentarios" (click)="abrirCerrarComentarios()">
-      {{ comentariosAbiertos ? 'Ocultar comentarios' : 'Ver comentarios' }}
+    <button
+      type="button"
+      class="btn-comentarios"
+      (click)="abrirCerrarComentarios()"
+    >
+      {{ comentariosAbiertos ? 'Ocultar' : 'Ver' }}
     </button>
+
+    <span class="contador-comentarios">
+      {{ totalComentarios || 0 }} 💬
+    </span>
 
     <button
       *ngIf="puedeEliminar()"
@@ -47,12 +62,12 @@
       class="btn-eliminar"
       (click)="clickEliminar()"
     >
-      Eliminar
+      🗑️ Eliminar
     </button>
   </footer>
 
   <section class="comentarios-card" *ngIf="comentariosAbiertos">
-    <h4>Comentarios</h4>
+    <h4>💬 Comentarios</h4>
 
     <div class="form-comentario">
       <textarea
@@ -88,7 +103,7 @@
           </span>
 
           <small *ngIf="comentario.modificado">
-            Comentario editado
+            Editado
           </small>
         </div>
       </div>
@@ -97,7 +112,10 @@
         {{ comentario.mensaje }}
       </p>
 
-      <div class="editar-comentario" *ngIf="comentarioEditandoId === comentario._id">
+      <div
+        class="editar-comentario"
+        *ngIf="comentarioEditandoId === comentario._id"
+      >
         <textarea [(ngModel)]="textoEditado"></textarea>
 
         <div>
@@ -105,7 +123,11 @@
             Guardar
           </button>
 
-          <button type="button" class="btn-secundario" (click)="cancelarEdicion()">
+          <button
+            type="button"
+            class="btn-secundario"
+            (click)="cancelarEdicion()"
+          >
             Cancelar
           </button>
         </div>
