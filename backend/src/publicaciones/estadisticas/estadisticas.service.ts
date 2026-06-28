@@ -46,14 +46,14 @@ export class EstadisticasService {
         },
       },
       {
-        // Agrupa publicaciones por usuario
+        // Agrupa por usuario y cuenta publicaciones
         $group: {
           _id: '$usuario',
           cantidad: { $sum: 1 },
         },
       },
       {
-        // Une la colección publicaciones con la colección usuarios
+        // Busca en usuarios, los datos de ese id
         $lookup: {
           from: 'usuarios',
           localField: '_id',
