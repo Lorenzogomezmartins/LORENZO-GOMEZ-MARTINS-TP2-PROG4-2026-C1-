@@ -108,13 +108,39 @@ La aplicación permite a los usuarios registrarse, iniciar sesión, administrar 
 ---
 
 
-
----
-
 # Sprint #3
 
-Pendiente.
+## Frontend
 
+- Implementación de comentarios en publicaciones.
+- Visualización de comentarios ordenados.
+- Carga inicial limitada de comentarios.
+- Botón para cargar más comentarios.
+- Creación de nuevos comentarios.
+- Edición de comentarios propios.
+- Indicador de comentario editado.
+- Almacenamiento del token recibido en login y registro.
+- Creación de la pantalla Cargando.
+- Validación del token al iniciar la aplicación.
+- Redirección automática según estado de sesión.
+- Manejo de error 401 redirigiendo al login.
+
+## Backend
+
+- Creación del Schema de Comentarios.
+- Creación del módulo Comentarios.
+- Creación del controller de comentarios.
+- Alta de comentarios en publicaciones.
+- Edición de comentarios propios.
+- Marcado de comentarios editados.
+- Listado de comentarios por publicación.
+- Ordenamiento de comentarios por fecha.
+- Paginación de comentarios mediante offset y limit.
+- Relación entre usuarios, publicaciones y comentarios.
+- Generación de token JWT en login y registro.
+- Validación de token mediante ruta autorizar.
+- Refresco de token mediante ruta refrescar.
+- Expiración del token a los 15 minutos.
 ---
 
 # Sprint #4
