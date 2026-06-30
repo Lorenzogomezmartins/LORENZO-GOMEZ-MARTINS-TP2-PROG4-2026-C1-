@@ -257,4 +257,30 @@ export class Publicaciones {
         },
       });
   }
+
+  activarPublicacion(publicacion: any) {
+  if (!this.usuarioActual) {
+    this.error = 'Tenés que iniciar sesión.';
+    return;
+  }
+
+  const confirma = confirm('¿Querés dar de alta esta publicación?');
+
+  if (!confirma) {
+    return;
+  }
+
+  this.publicacionesService
+    .activarPublicacion(
+  publicacion._id,
+  this.usuarioActual,
+)
+    .subscribe({
+      next: () => this.cargarPublicaciones(),
+      error: (err) => {
+        this.error =
+          err.error?.message || 'No se pudo activar la publicación.';
+      },
+    });
+}
 }

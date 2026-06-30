@@ -57,13 +57,14 @@
     </span>
 
     <button
-      *ngIf="puedeEliminar()"
-      type="button"
-      class="btn-eliminar"
-      (click)="clickEliminar()"
-    >
-      🗑️ Eliminar
-    </button>
+  [appAdminOnly]="usuarioActual"
+  type="button"
+  [class.btn-eliminar]="publicacion.activa"
+  [class.btn-activar]="!publicacion.activa"
+  (click)="publicacion.activa ? clickEliminar() : clickActivar()"
+>
+  {{ publicacion.activa ? '🗑️ Eliminar' : '✅ Dar de alta' }}
+</button>
   </footer>
 
   <section class="comentarios-card" *ngIf="mostrarComentarios">

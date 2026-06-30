@@ -148,4 +148,17 @@ export class PublicacionesService {
       },
     );
   }
+
+  activarPublicacion(publicacionId: string, usuario: any) {
+  return this.http.post(
+    `${this.apiUrl}/${publicacionId}/activar`,
+    {},
+    {
+      headers: {
+        'usuario-id': usuario._id,
+        'usuario-perfil': usuario.perfil,
+      },
+    }
+  );
+}
 }

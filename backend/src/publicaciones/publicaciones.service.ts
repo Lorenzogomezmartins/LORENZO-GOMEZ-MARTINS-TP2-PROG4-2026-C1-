@@ -20,7 +20,7 @@ import { CrearPublicacionDto } from './dto/crear-publicacion.dto'; // DTO para c
 
 // Tipo usado para filtrar publicaciones
 type FiltroPublicaciones = {
-  activa: boolean;
+  activa?: boolean;
   usuario?: Types.ObjectId;
 };
 
@@ -93,14 +93,17 @@ export class PublicacionesService {
 
   // Lista publicaciones activas con orden, paginación y filtro opcional por usuario
   async listarPublicaciones(
-    orden: string = 'fecha',
-    offset: number = 0,
-    limit: number = 5,
-    usuarioId?: string,
-  ) {
-    const filtro: FiltroPublicaciones = {
-      activa: true,
-    };
+  orden: string = 'fecha',
+  offset: number = 0,
+  limit: number = 5,
+  usuarioId?: string,
+  perfil?: string,
+) {
+  const filtro: FiltroPublicaciones = {};
+
+  if (perfil !== 'administrador') {
+    filtro.activa = true;
+  }
 
     // Si se envía usuarioId, filtra publicaciones de ese usuario
     if (usuarioId) {
@@ -287,4 +290,36 @@ export class PublicacionesService {
       mensaje: 'Publicación eliminada correctamente',
     };
   }
+
+  // Reactiva una publicación dada de baja.
+// Solo un administrador puede hacerlo.
+async activarPublicacion(
+  publicacionId: string,
+  usuarioId: string,
+  perfil: string,
+) {
+  const publicacion = await this.publicacionModel.findById(
+    this.validarObjectId(publicacionId, 'publicacionId'),
+  );
+
+  if (!publicacion) {
+    throw new NotFoundException('Publicación no encontrada');
+  }
+
+  if (perfil !== 'administrador') {
+    throw new ForbiddenException(
+      'Solo un administrador puede activar publicaciones',
+    );
+  }
+
+  this.validarObjectId(usuarioId, 'usuarioId');
+
+  publicacion.activa = true;
+
+  await publicacion.save();
+
+  return {
+    mensaje: 'Publicación activada correctamente',
+  };
+}
 }

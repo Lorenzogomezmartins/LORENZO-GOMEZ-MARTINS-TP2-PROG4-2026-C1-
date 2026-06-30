@@ -35,20 +35,22 @@ export class PublicacionesController {
   }
 
   // Lista publicaciones con orden, paginación y filtro opcional por usuario
-  @Get()
-  listarPublicaciones(
-    @Query('orden') orden = 'fecha',
-    @Query('offset') offset = '0',
-    @Query('limit') limit = '5',
-    @Query('usuarioId') usuarioId?: string,
-  ) {
-    return this.publicacionesService.listarPublicaciones(
-      orden,
-      Number(offset),
-      Number(limit),
-      usuarioId,
-    );
-  }
+ @Get()
+listarPublicaciones(
+  @Query('orden') orden = 'fecha',
+  @Query('offset') offset = '0',
+  @Query('limit') limit = '5',
+  @Query('usuarioId') usuarioId?: string,
+  @Headers('usuario-perfil') perfil?: string,
+) {
+  return this.publicacionesService.listarPublicaciones(
+    orden,
+    Number(offset),
+    Number(limit),
+    usuarioId,
+    perfil,
+  );
+}
 
   // Obtiene una publicación específica por ID
   @Get(':id')
@@ -87,4 +89,18 @@ export class PublicacionesController {
       perfil,
     );
   }
+  // Reactiva una publicación dada de baja.
+// Solo debería usarlo un administrador.
+@Post(':id/activar')
+activarPublicacion(
+  @Param('id') id: string,
+  @Headers('usuario-id') usuarioId: string,
+  @Headers('usuario-perfil') perfil: string,
+) {
+  return this.publicacionesService.activarPublicacion(
+    id,
+    usuarioId,
+    perfil,
+  );
+}
 }

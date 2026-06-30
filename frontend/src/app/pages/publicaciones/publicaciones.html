@@ -65,12 +65,13 @@
     </div>
 
     <app-publicacion-card
-      *ngFor="let publicacion of publicaciones"
-      [publicacion]="publicacion"
-      [usuarioActual]="usuarioActual"
-      (like)="manejarLike($event)"
-      (eliminar)="eliminarPublicacion($event)"
-    ></app-publicacion-card>
+  *ngFor="let publicacion of publicaciones"
+  [publicacion]="publicacion"
+  [usuarioActual]="usuarioActual"
+  (like)="manejarLike($event)"
+  (eliminar)="eliminarPublicacion($event)"
+  (activar)="activarPublicacion($event)"
+></app-publicacion-card>
 
     <div class="paginacion">
       <button
