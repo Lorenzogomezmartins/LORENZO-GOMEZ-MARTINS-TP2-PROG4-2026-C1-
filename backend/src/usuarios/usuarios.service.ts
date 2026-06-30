@@ -5,7 +5,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { CrearUsuarioAdminDto } from './dto/crear-usuario-admin.dto';
 
 import { Usuario, UsuarioDocument } from './schemas/usuario.schema'; // Schema y documento de Usuario
