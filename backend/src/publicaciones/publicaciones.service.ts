@@ -1,48 +1,88 @@
 import {
-  BadRequestException, // Error 400 para datos inválidos
-  ForbiddenException, // Error 403 para acciones sin permiso
-  Injectable, // Permite inyectar este servicio
-  NotFoundException, // Error 404 cuando no se encuentra un recurso
+  BadRequestException, // Error 400: se usa cuando un dato enviado es inválido
+  ForbiddenException, // Error 403: se usa cuando el usuario no tiene permisos
+  Injectable, // Permite inyectar este servicio en NestJS
+  NotFoundException, // Error 404: se usa cuando no se encuentra un recurso
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose'; // Permite inyectar un modelo de Mongoose
-import { Model, PipelineStage, Types } from 'mongoose'; // Tipos de Mongoose
 
-import { Publicacion, PublicacionDocument } from './schemas/publicacion.schema'; // Schema y documento de publicación
+import { InjectModel } from '@nestjs/mongoose'; // Permite inyectar modelos de Mongoose
+import { Model, PipelineStage, Types } from 'mongoose'; // Tipos de Mongoose para modelos, ObjectId y aggregations
+
+import cloudinary from '../cloudinary'; // Configuración de Cloudinary
+import * as streamifier from 'streamifier'; // Convierte buffers en streams
+
+import {
+  Publicacion,
+  PublicacionDocument,
+} from './schemas/publicacion.schema'; // Schema y documento de publicación
+
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto'; // DTO para crear publicaciones
 
-// Tipo usado para armar el filtro de búsqueda de publicaciones
+// Tipo usado para filtrar publicaciones
 type FiltroPublicaciones = {
   activa: boolean;
   usuario?: Types.ObjectId;
 };
 
+// Servicio encargado de la lógica de publicaciones
 @Injectable()
 export class PublicacionesService {
   constructor(
-    // Inyecta el modelo de Publicacion para trabajar con MongoDB
+    // Inyecta el modelo Publicacion para trabajar con MongoDB
     @InjectModel(Publicacion.name)
     private readonly publicacionModel: Model<PublicacionDocument>,
   ) {}
 
-  // Valida que un string sea un ObjectId válido de MongoDB
+  // Valida que un ID tenga formato válido de ObjectId
   private validarObjectId(id: string, campo: string): Types.ObjectId {
     if (!id || !Types.ObjectId.isValid(id)) {
       throw new BadRequestException(`${campo} inválido`);
     }
 
-    // Convierte el string en ObjectId para poder usarlo en consultas MongoDB
     return new Types.ObjectId(id);
   }
 
-  // Crea una nueva publicación
-  async crearPublicacion(dto: CrearPublicacionDto, imagenUrl: string) {
+  // Sube una imagen a Cloudinary y devuelve la URL segura
+  private subirImagenCloudinary(file: any): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'redsocial/publicaciones',
+        },
+        (error, result) => {
+          if (error || !result) {
+            return reject(error);
+          }
+
+          resolve(result.secure_url);
+        },
+      );
+
+      // Convierte el buffer recibido por Multer en stream
+      streamifier.createReadStream(file.buffer).pipe(uploadStream);
+    });
+  }
+
+  // Crea una publicación nueva
+  async crearPublicacion(
+    dto: CrearPublicacionDto,
+    imagen?: any,
+  ) {
+    let imagenUrl = '';
+
+    // Si se envió imagen, la sube a Cloudinary
+    if (imagen) {
+      imagenUrl = await this.subirImagenCloudinary(imagen);
+    }
+
+    // Guarda la publicación en MongoDB
     const publicacion = await this.publicacionModel.create({
       titulo: dto.titulo,
       descripcion: dto.descripcion,
       imagen: imagenUrl,
       usuario: this.validarObjectId(dto.usuarioId, 'usuarioId'),
-      likes: [], // La publicación inicia sin likes
-      activa: true, // Se usa borrado lógico, por eso arranca activa
+      likes: [],
+      activa: true,
     });
 
     return {
@@ -58,12 +98,11 @@ export class PublicacionesService {
     limit: number = 5,
     usuarioId?: string,
   ) {
-    // Filtro base: solo publicaciones activas
     const filtro: FiltroPublicaciones = {
       activa: true,
     };
 
-    // Si llega usuarioId, filtra publicaciones de ese usuario
+    // Si se envía usuarioId, filtra publicaciones de ese usuario
     if (usuarioId) {
       filtro.usuario = this.validarObjectId(usuarioId, 'usuarioId');
     }
@@ -74,39 +113,31 @@ export class PublicacionesService {
         ? { cantidadLikes: -1, createdAt: -1 }
         : { createdAt: -1 };
 
-    // Pipeline de MongoDB para listar, ordenar, paginar y traer datos del usuario
+    // Pipeline de MongoDB para traer publicaciones con usuario y cantidad de likes
     const pipeline: PipelineStage[] = [
-      {
-        $match: filtro, // Filtra publicaciones según el objeto filtro
-      },
+      { $match: filtro },
       {
         $addFields: {
           cantidadLikes: {
-            $size: '$likes', // Calcula la cantidad de likes contando el array likes
+            $size: '$likes',
           },
         },
       },
-      {
-        $sort: sort, // Ordena por likes o por fecha
-      },
-      {
-        $skip: Number(offset), // Salta registros para paginación
-      },
-      {
-        $limit: Number(limit), // Limita la cantidad de resultados devueltos
-      },
+      { $sort: sort },
+      { $skip: Number(offset) },
+      { $limit: Number(limit) },
       {
         $lookup: {
-          from: 'usuarios', // Colección relacionada
-          localField: 'usuario', // Campo en Publicacion
-          foreignField: '_id', // Campo en Usuario
-          as: 'usuario', // Nombre del campo resultante
+          from: 'usuarios',
+          localField: 'usuario',
+          foreignField: '_id',
+          as: 'usuario',
         },
       },
       {
         $unwind: {
-          path: '$usuario', // Convierte el array usuario en un objeto
-          preserveNullAndEmptyArrays: true, // Mantiene la publicación aunque no encuentre usuario
+          path: '$usuario',
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -129,11 +160,11 @@ export class PublicacionesService {
       },
     ];
 
-    // Ejecuta el aggregate con el pipeline definido arriba
-    const publicaciones = await this.publicacionModel.aggregate(pipeline);
+    const publicaciones =
+      await this.publicacionModel.aggregate(pipeline);
 
-    // Cuenta el total de publicaciones que cumplen el filtro
-    const total = await this.publicacionModel.countDocuments(filtro);
+    const total =
+      await this.publicacionModel.countDocuments(filtro);
 
     return {
       publicaciones,
@@ -143,7 +174,26 @@ export class PublicacionesService {
     };
   }
 
-  // Agrega un like de un usuario a una publicación
+  // Obtiene una publicación por ID
+  async obtenerPublicacionPorId(id: string) {
+    const publicacion = await this.publicacionModel
+      .findOne({
+        _id: this.validarObjectId(id, 'publicacionId'),
+        activa: true,
+      })
+      .populate(
+        'usuario',
+        'nombre apellido nombreUsuario imagenPerfil perfil',
+      );
+
+    if (!publicacion) {
+      throw new NotFoundException('Publicación no encontrada');
+    }
+
+    return publicacion;
+  }
+
+  // Agrega un like a una publicación
   async darLike(publicacionId: string, usuarioId: string) {
     const publicacion = await this.publicacionModel.findById(
       this.validarObjectId(publicacionId, 'publicacionId'),
@@ -153,14 +203,15 @@ export class PublicacionesService {
       throw new NotFoundException('Publicación no encontrada');
     }
 
-    const usuarioObjectId = this.validarObjectId(usuarioId, 'usuarioId');
+    const usuarioObjectId =
+      this.validarObjectId(usuarioId, 'usuarioId');
 
-    // Verifica si el usuario ya dio like usando some()
+    // Verifica si el usuario ya dio like
     const yaDioLike = publicacion.likes.some(
       (id) => id.toString() === usuarioObjectId.toString(),
     );
 
-    // Si todavía no dio like, lo agrega al array
+    // Si todavía no dio like, lo agrega
     if (!yaDioLike) {
       publicacion.likes.push(usuarioObjectId);
       await publicacion.save();
@@ -171,7 +222,7 @@ export class PublicacionesService {
     };
   }
 
-  // Quita el like de un usuario en una publicación
+  // Quita el like de una publicación
   async quitarLike(publicacionId: string, usuarioId: string) {
     const publicacion = await this.publicacionModel.findById(
       this.validarObjectId(publicacionId, 'publicacionId'),
@@ -181,9 +232,10 @@ export class PublicacionesService {
       throw new NotFoundException('Publicación no encontrada');
     }
 
-    const usuarioObjectId = this.validarObjectId(usuarioId, 'usuarioId');
+    const usuarioObjectId =
+      this.validarObjectId(usuarioId, 'usuarioId');
 
-    // filter() crea un nuevo array sin el id del usuario
+    // Filtra todos los likes excepto el del usuario actual
     publicacion.likes = publicacion.likes.filter(
       (id) => id.toString() !== usuarioObjectId.toString(),
     );
@@ -195,7 +247,7 @@ export class PublicacionesService {
     };
   }
 
-  // Elimina una publicación mediante borrado lógico
+  // Elimina una publicación mediante baja lógica
   async eliminarPublicacion(
     publicacionId: string,
     usuarioId: string,
@@ -209,23 +261,26 @@ export class PublicacionesService {
       throw new NotFoundException('Publicación no encontrada');
     }
 
-    const usuarioObjectId = this.validarObjectId(usuarioId, 'usuarioId');
+    const usuarioObjectId =
+      this.validarObjectId(usuarioId, 'usuarioId');
 
-    // Verifica si quien quiere eliminar es el autor
+    // Verifica si quien elimina es el autor
     const esAutor =
       publicacion.usuario.toString() === usuarioObjectId.toString();
 
-    // Los administradores también pueden eliminar publicaciones
+    // Verifica si quien elimina es administrador
     const esAdmin = perfil === 'administrador';
 
+    // Si no es autor ni admin, no tiene permiso
     if (!esAutor && !esAdmin) {
       throw new ForbiddenException(
         'No tenés permisos para eliminar esta publicación',
       );
     }
 
-    // Borrado lógico: no se elimina de MongoDB, solo se desactiva
+    // Baja lógica: no se borra de MongoDB, solo se marca como inactiva
     publicacion.activa = false;
+
     await publicacion.save();
 
     return {

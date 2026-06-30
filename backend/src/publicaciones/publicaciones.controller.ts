@@ -1,63 +1,40 @@
 import {
-  Body, // Lee datos enviados en el body
+  Body, // Permite leer datos enviados en el body
   Controller, // Define una clase como controlador
   Delete, // Define rutas HTTP DELETE
   Get, // Define rutas HTTP GET
-  Headers, // Lee valores enviados en los headers
-  Param, // Lee parámetros de la URL
+  Headers, // Permite leer headers personalizados
+  Param, // Permite leer parámetros de la URL
   Post, // Define rutas HTTP POST
-  Query, // Lee parámetros de consulta
-  UploadedFile, // Permite acceder al archivo subido
-  UseInterceptors, // Permite usar interceptores como Multer
+  Query, // Permite leer query params
+  UploadedFile, // Permite recibir archivos subidos
+  UseInterceptors, // Permite usar interceptores como FileInterceptor
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express'; // Interceptor para recibir archivos
-import { diskStorage } from 'multer'; // Configura almacenamiento en disco
-import { extname } from 'path'; // Obtiene la extensión de un archivo
+
+import { FileInterceptor } from '@nestjs/platform-express'; // Interceptor para recibir archivos con Multer
 
 import { PublicacionesService } from './publicaciones.service'; // Servicio con la lógica de publicaciones
-import { CrearPublicacionDto } from './dto/crear-publicacion.dto'; // DTO para crear publicaciones
+import { CrearPublicacionDto } from './dto/crear-publicacion.dto'; // DTO para validar datos de creación
 
-// Todas las rutas de este controlador empiezan con /publicaciones
+// Todas las rutas comienzan con /publicaciones
 @Controller('publicaciones')
 export class PublicacionesController {
-  // Inyecta el servicio para delegar la lógica de negocio
   constructor(private readonly publicacionesService: PublicacionesService) {}
 
-  // POST /publicaciones - crea una publicación con imagen opcional
+  // Crea una publicación con imagen opcional
   @Post()
-  @UseInterceptors(
-    FileInterceptor('imagen', {
-      storage: diskStorage({
-        destination: './uploads/publicaciones', // Carpeta donde se guarda la imagen
-
-        filename: (req, file, callback) => {
-          // Genera un nombre único para evitar archivos repetidos
-          const nombreArchivo =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-
-          // Guarda el archivo con su extensión original
-          callback(null, nombreArchivo + extname(file.originalname));
-        },
-      }),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('imagen'))
   crearPublicacion(
     @Body() crearPublicacionDto: CrearPublicacionDto,
-    @UploadedFile() imagen?: Express.Multer.File,
+    @UploadedFile() imagen?: any,
   ) {
-    // Si se subió imagen, arma la URL pública; si no, queda vacío
-    const imagenUrl = imagen
-      ? `https://redsocial-backend-fy2b.onrender.com/uploads/publicaciones/${imagen.filename}`
-      : '';
-
-    // Envía los datos al service para crear la publicación
     return this.publicacionesService.crearPublicacion(
       crearPublicacionDto,
-      imagenUrl,
+      imagen,
     );
   }
 
-  // GET /publicaciones - lista publicaciones con filtros y paginación
+  // Lista publicaciones con orden, paginación y filtro opcional por usuario
   @Get()
   listarPublicaciones(
     @Query('orden') orden = 'fecha',
@@ -65,7 +42,6 @@ export class PublicacionesController {
     @Query('limit') limit = '5',
     @Query('usuarioId') usuarioId?: string,
   ) {
-    // Convierte offset y limit a número porque llegan como string desde la URL
     return this.publicacionesService.listarPublicaciones(
       orden,
       Number(offset),
@@ -74,26 +50,41 @@ export class PublicacionesController {
     );
   }
 
-  // POST /publicaciones/:id/like - agrega like a una publicación
+  // Obtiene una publicación específica por ID
+  @Get(':id')
+  obtenerPublicacionPorId(@Param('id') id: string) {
+    return this.publicacionesService.obtenerPublicacionPorId(id);
+  }
+
+  // Agrega like a una publicación
   @Post(':id/like')
-  darLike(@Param('id') id: string, @Body('usuarioId') usuarioId: string) {
+  darLike(
+    @Param('id') id: string,
+    @Body('usuarioId') usuarioId: string,
+  ) {
     return this.publicacionesService.darLike(id, usuarioId);
   }
 
-  // DELETE /publicaciones/:id/like - quita like a una publicación
+  // Quita like de una publicación
   @Delete(':id/like')
-  quitarLike(@Param('id') id: string, @Body('usuarioId') usuarioId: string) {
+  quitarLike(
+    @Param('id') id: string,
+    @Body('usuarioId') usuarioId: string,
+  ) {
     return this.publicacionesService.quitarLike(id, usuarioId);
   }
 
-  // DELETE /publicaciones/:id - elimina una publicación
+  // Elimina una publicación si el usuario tiene permiso
   @Delete(':id')
   eliminarPublicacion(
     @Param('id') id: string,
     @Headers('usuario-id') usuarioId: string,
     @Headers('usuario-perfil') perfil: string,
   ) {
-    // Usa headers para saber quién intenta eliminar y qué permisos tiene
-    return this.publicacionesService.eliminarPublicacion(id, usuarioId, perfil);
+    return this.publicacionesService.eliminarPublicacion(
+      id,
+      usuarioId,
+      perfil,
+    );
   }
 }
