@@ -4,6 +4,8 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
+import { provideServiceWorker } from '@angular/service-worker';
+import { isDevMode } from '@angular/core';
 
 // Permite registrar las rutas de la aplicación.
 import { provideRouter } from '@angular/router';
@@ -28,5 +30,12 @@ export const appConfig: ApplicationConfig = {
 
     // Habilita HttpClient para consumir APIs y servicios externos.
     provideHttpClient(),
+
+    provideServiceWorker('ngsw-worker.js', {
+  enabled: !isDevMode(),
+  registrationStrategy: 'registerWhenStable:30000',
+}),
   ],
+
+  
 };
