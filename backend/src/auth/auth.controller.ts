@@ -47,7 +47,7 @@ export class AuthController {
   ) {
     // Si hay imagen, arma la URL pública; si no, deja el campo vacío
     const imagenPerfilUrl = file
-      ? `http://localhost:3000/uploads/${file.filename}`
+      ? `https://redsocial-backend-fy2b.onrender.com/uploads/${file.filename}`
       : '';
 
     // Envía los datos al servicio para crear el usuario
