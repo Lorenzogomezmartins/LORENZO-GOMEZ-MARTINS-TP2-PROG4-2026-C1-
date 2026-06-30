@@ -24,54 +24,75 @@
       <input type="date" [(ngModel)]="hasta" />
     </div>
 
-    <button type="button" (click)="cargarEstadisticas()">
+    <button
+      type="button"
+      (click)="cargarEstadisticas()"
+    >
       Aplicar filtros
     </button>
   </div>
 
   <div class="graficos-grid">
+
+    <!-- Publicaciones por usuario -->
     <article class="grafico-card">
       <h2>Publicaciones por usuario</h2>
       <p>Usuarios con más publicaciones en el período.</p>
 
-      <p class="sin-datos" *ngIf="sinDatosPublicaciones">
+      <p
+        class="sin-datos"
+        *ngIf="sinDatosPublicaciones"
+      >
         No hay publicaciones en este período.
       </p>
 
-      <div class="canvas-box" [class.oculto]="sinDatosPublicaciones">
+      <div
+        class="canvas-box"
+        [class.oculto]="sinDatosPublicaciones"
+      >
         <canvas #graficoPublicaciones></canvas>
       </div>
     </article>
 
-    <article class="grafico-card total-card">
+    <!-- Comentarios por día -->
+    <article class="grafico-card">
       <h2>Comentarios por día</h2>
-<p>Evolución de comentarios en el período.</p>
+      <p>Evolución de comentarios realizados en el período.</p>
 
-      <div class="numero-total">
-        {{ totalComentarios }}
-      </div>
-
-      <p class="subtexto">comentarios</p>
-
-      <p class="sin-datos" *ngIf="sinDatosComentariosTotal">
+      <p
+        class="sin-datos"
+        *ngIf="sinDatosComentariosTotal"
+      >
         No hay comentarios en este período.
       </p>
 
-      <div class="canvas-box" [class.oculto]="sinDatosComentariosTotal">
+      <div
+        class="canvas-box"
+        [class.oculto]="sinDatosComentariosTotal"
+      >
         <canvas #graficoComentariosTotal></canvas>
       </div>
     </article>
 
+    <!-- Comentarios por publicación -->
     <article class="grafico-card">
       <h2>Top publicaciones comentadas</h2>
       <p>Las 4 publicaciones con más comentarios.</p>
 
-      <p class="sin-datos" *ngIf="sinDatosComentariosPublicacion">
+      <p
+        class="sin-datos"
+        *ngIf="sinDatosComentariosPublicacion"
+      >
         No hay comentarios por publicación.
       </p>
 
-      <div class="canvas-box" [class.oculto]="sinDatosComentariosPublicacion">
+      <div
+        class="canvas-box"
+        [class.oculto]="sinDatosComentariosPublicacion"
+      >
         <canvas #graficoComentariosPublicacion></canvas>
       </div>
     </article>
+
   </div>
+</section>
