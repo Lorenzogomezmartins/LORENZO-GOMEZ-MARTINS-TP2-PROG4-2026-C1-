@@ -101,77 +101,78 @@ export class PublicacionesService {
 ) {
   const filtro: FiltroPublicaciones = {};
 
-    // Si se envía usuarioId, filtra publicaciones de ese usuario
-    if (usuarioId) {
-      filtro.usuario = this.validarObjectId(usuarioId, 'usuarioId');
-    }
-
-    // Define el orden: por likes o por fecha
-    const sort: Record<string, 1 | -1> =
-      orden === 'likes'
-        ? { cantidadLikes: -1, createdAt: -1 }
-        : { createdAt: -1 };
-
-    // Pipeline de MongoDB para traer publicaciones con usuario y cantidad de likes
-    const pipeline: PipelineStage[] = [
-      { $match: filtro },
-      {
-        $addFields: {
-          cantidadLikes: {
-            $size: '$likes',
-          },
-        },
-      },
-      { $sort: sort },
-      { $skip: Number(offset) },
-      { $limit: Number(limit) },
-      {
-        $lookup: {
-          from: 'usuarios',
-          localField: 'usuario',
-          foreignField: '_id',
-          as: 'usuario',
-        },
-      },
-      {
-        $unwind: {
-          path: '$usuario',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $project: {
-          titulo: 1,
-          descripcion: 1,
-          imagen: 1,
-          likes: 1,
-          cantidadLikes: 1,
-          activa: 1,
-          createdAt: 1,
-          updatedAt: 1,
-          'usuario._id': 1,
-          'usuario.nombre': 1,
-          'usuario.apellido': 1,
-          'usuario.nombreUsuario': 1,
-          'usuario.imagenPerfil': 1,
-          'usuario.perfil': 1,
-        },
-      },
-    ];
-
-    const publicaciones =
-      await this.publicacionModel.aggregate(pipeline);
-
-    const total =
-      await this.publicacionModel.countDocuments(filtro);
-
-    return {
-      publicaciones,
-      total,
-      offset: Number(offset),
-      limit: Number(limit),
-    };
+  // Si NO es administrador, solo ve publicaciones activas.
+  if (perfil !== 'administrador') {
+    filtro.activa = true;
   }
+
+  // Si se envía usuarioId, filtra publicaciones de ese usuario.
+  if (usuarioId) {
+    filtro.usuario = this.validarObjectId(usuarioId, 'usuarioId');
+  }
+
+  const sort: Record<string, 1 | -1> =
+    orden === 'likes'
+      ? { cantidadLikes: -1, createdAt: -1 }
+      : { createdAt: -1 };
+
+  const pipeline: PipelineStage[] = [
+    { $match: filtro },
+    {
+      $addFields: {
+        cantidadLikes: {
+          $size: '$likes',
+        },
+      },
+    },
+    { $sort: sort },
+    { $skip: Number(offset) },
+    { $limit: Number(limit) },
+    {
+      $lookup: {
+        from: 'usuarios',
+        localField: 'usuario',
+        foreignField: '_id',
+        as: 'usuario',
+      },
+    },
+    {
+      $unwind: {
+        path: '$usuario',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        titulo: 1,
+        descripcion: 1,
+        imagen: 1,
+        likes: 1,
+        cantidadLikes: 1,
+        activa: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        'usuario._id': 1,
+        'usuario.nombre': 1,
+        'usuario.apellido': 1,
+        'usuario.nombreUsuario': 1,
+        'usuario.imagenPerfil': 1,
+        'usuario.perfil': 1,
+      },
+    },
+  ];
+
+  const publicaciones = await this.publicacionModel.aggregate(pipeline);
+
+  const total = await this.publicacionModel.countDocuments(filtro);
+
+  return {
+    publicaciones,
+    total,
+    offset: Number(offset),
+    limit: Number(limit),
+  };
+}
 
   // Obtiene una publicación por ID
   async obtenerPublicacionPorId(id: string) {
