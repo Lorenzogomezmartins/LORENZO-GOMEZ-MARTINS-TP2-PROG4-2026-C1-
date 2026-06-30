@@ -92,15 +92,42 @@ export class EstadisticasService {
     ]);
   }
 
-  // Cuenta el total de comentarios activos en un rango de fechas
-  async comentariosTotal(desde: string, hasta: string) {
-    const cantidad = await this.comentarioModel.countDocuments({
-      activo: true,
-      createdAt: this.crearFiltroFechas(desde, hasta),
-    });
-
-    return { cantidad };
-  }
+  // Cuenta comentarios por día en un rango de fechas
+comentariosTotal(desde: string, hasta: string) {
+  return this.comentarioModel.aggregate([
+    {
+      $match: {
+        activo: true,
+        createdAt: this.crearFiltroFechas(desde, hasta),
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$createdAt',
+          },
+        },
+        cantidad: {
+          $sum: 1,
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        fecha: '$_id',
+        cantidad: 1,
+      },
+    },
+    {
+      $sort: {
+        fecha: 1,
+      },
+    },
+  ]);
+}
 
   // Cuenta comentarios por publicación en un rango de fechas
   comentariosPorPublicacion(desde: string, hasta: string) {

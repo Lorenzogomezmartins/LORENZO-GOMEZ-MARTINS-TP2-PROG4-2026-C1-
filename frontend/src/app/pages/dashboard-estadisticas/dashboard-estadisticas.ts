@@ -131,54 +131,63 @@ export class DashboardEstadisticas implements AfterViewInit {
       });
   }
 
-  // Consulta al backend y grafica el total de comentarios realizados.
-  cargarComentariosTotal(): void {
-    this.estadisticasService
-      .comentariosTotal(this.desde, this.hasta) // Llama al service pasando desde y hasta.
-      .subscribe({
-        next: (data) => { // Se ejecuta cuando llega correctamente la respuesta.
-          this.chartComentariosTotal?.destroy(); // Destruye el gráfico anterior si existía.
+  // Consulta al backend y grafica comentarios por día en un lapso.
+cargarComentariosTotal(): void {
+  this.estadisticasService
+    .comentariosTotal(this.desde, this.hasta)
+    .subscribe({
+      next: (data) => {
+        this.chartComentariosTotal?.destroy();
 
-          this.totalComentarios = data.cantidad || 0; // Guarda la cantidad total recibida o 0 si no viene nada.
+        const comentariosPorDia: any[] = Array.isArray(data) ? data : [];
 
-          this.sinDatosComentariosTotal = this.totalComentarios === 0; // Verifica si no hay comentarios.
+        this.totalComentarios = comentariosPorDia.reduce(
+          (total: number, item: any) => total + item.cantidad,
+          0,
+        );
 
-          if (this.sinDatosComentariosTotal) {
-            return; // Si no hay comentarios, no dibuja el gráfico.
-          }
+        this.sinDatosComentariosTotal = this.totalComentarios === 0;
 
-          this.chartComentariosTotal = new Chart( // Crea el gráfico de comentarios totales.
-            this.graficoComentariosTotal.nativeElement, // Usa el canvas correspondiente del HTML.
-            {
-              type: 'doughnut', // Define un gráfico tipo dona.
-              data: {
-                labels: ['Comentarios'], // Etiqueta del dato mostrado.
-                datasets: [
-                  {
-                    label: 'Comentarios totales', // Nombre del dataset.
-                    data: [this.totalComentarios], // Valor único: total de comentarios.
-                    borderWidth: 2, // Grosor del borde de la dona.
-                  },
-                ],
-              },
-              options: {
-                responsive: true, // Se adapta al tamaño de pantalla.
-                maintainAspectRatio: false, // Permite definir alto/ancho desde CSS.
-                cutout: '68%', // Define el tamaño del agujero central de la dona.
-                plugins: {
-                  legend: {
-                    display: false, // Oculta la leyenda.
+        if (this.sinDatosComentariosTotal) {
+          return;
+        }
+
+        this.chartComentariosTotal = new Chart(
+          this.graficoComentariosTotal.nativeElement,
+          {
+            type: 'line',
+            data: {
+              labels: comentariosPorDia.map((item: any) => item.fecha),
+              datasets: [
+                {
+                  label: 'Comentarios por día',
+                  data: comentariosPorDia.map((item: any) => item.cantidad),
+                  borderWidth: 2,
+                  tension: 0.3,
+                  fill: false,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0,
                   },
                 },
               },
             },
-          );
-        },
-        error: () => { // Se ejecuta si falla la petición.
-          this.error = 'No se pudo cargar el total de comentarios.';
-        },
-      });
-  }
+          },
+        );
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar los comentarios por día.';
+      },
+    });
+}
 
   // Consulta al backend y grafica las publicaciones con más comentarios.
   cargarComentariosPorPublicacion(): void {
