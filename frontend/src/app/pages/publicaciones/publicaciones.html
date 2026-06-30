@@ -3,27 +3,45 @@
     <h1>Publicaciones</h1>
 
     <form
-      class="form-publicacion"
-      [formGroup]="publicacionForm"
-      (ngSubmit)="crearPublicacion()"
-    >
+  class="form-publicacion"
+  [formGroup]="publicacionForm"
+  (ngSubmit)="crearPublicacion()"
+>
+  <div class="form-header">
+    <div>
       <h2>Crear publicación</h2>
+      <p>Compartí una idea, novedad o imagen con la comunidad.</p>
+    </div>
 
-      <input
-        type="text"
-        placeholder="Título"
-        formControlName="titulo"
-      />
+    <span class="badge-form">📝 Nuevo post</span>
+  </div>
 
-      <textarea
-        placeholder="¿Qué querés compartir?"
-        formControlName="descripcion"
-      ></textarea>
+  <div class="campo">
+    <label>Título</label>
+    <input
+      type="text"
+      placeholder="Ej: Mi primera publicación"
+      formControlName="titulo"
+    />
+  </div>
 
-      <input type="file" (change)="seleccionarImagen($event)" />
+  <div class="campo">
+    <label>Descripción</label>
+    <textarea
+      placeholder="¿Qué querés compartir?"
+      formControlName="descripcion"
+    ></textarea>
+  </div>
 
-      <button type="submit">Publicar</button>
-    </form>
+  <div class="campo archivo">
+    <label>Imagen opcional</label>
+    <input type="file" (change)="seleccionarImagen($event)" />
+  </div>
+
+  <button type="submit">
+     Publicar
+  </button>
+</form>
 
     <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
     <p class="error" *ngIf="error">{{ error }}</p>

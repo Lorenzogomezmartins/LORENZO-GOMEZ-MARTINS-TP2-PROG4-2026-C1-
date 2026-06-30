@@ -1,5 +1,15 @@
 <section class="dashboard-usuarios">
-  <h1>Dashboard de usuarios</h1>
+  <h1>Dashboard administrativo</h1>
+
+  <div class="tabs-dashboard">
+    <a routerLink="/dashboard/usuarios" routerLinkActive="activo">
+      Usuarios
+    </a>
+
+    <a routerLink="/dashboard/estadisticas" routerLinkActive="activo">
+      Estadísticas
+    </a>
+  </div>
 
   <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
   <p class="error" *ngIf="error">{{ error }}</p>

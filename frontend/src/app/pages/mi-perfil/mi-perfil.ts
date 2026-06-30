@@ -12,6 +12,7 @@ import { PublicacionesService } from '../../services/publicaciones';
 
 // Componente reutilizable para mostrar cada publicación.
 import { PublicacionCard } from '../../components/publicacion-card/publicacion-card';
+import { ComentariosService } from '../../services/comentarios';
 
 @Component({
   // Etiqueta HTML que representa esta página.
@@ -29,16 +30,19 @@ export class MiPerfil {
 
   // Mensaje de error para mostrar en pantalla.
   error = '';
+  comentarios: any[] = [];
 
   constructor(
     private authService: AuthService,
     private publicacionesService: PublicacionesService,
+    private comentariosService: ComentariosService,
   ) {
     // Obtiene el usuario logueado.
     this.usuarioActual = this.authService.obtenerUsuario();
 
     // Carga las publicaciones del usuario al entrar al perfil.
     this.cargarMisPublicaciones();
+    this.cargarMisComentarios();
   }
 
   // Carga las publicaciones creadas por el usuario actual.
@@ -69,4 +73,36 @@ export class MiPerfil {
         },
       });
   }
+
+ cargarMisComentarios() {
+  if (!this.usuarioActual) {
+    this.error = 'No hay usuario logueado.';
+    return;
+  }
+
+  this.comentariosService
+    .listarComentariosDeUsuario(this.usuarioActual._id)
+    .subscribe({
+      next: (data: any) => {
+        this.comentarios = data;
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar tus comentarios.';
+      },
+    });
+}   // ← TERMINA ESTE MÉTODO
+
+// ↓↓↓ PEGÁ ESTO ACÁ ↓↓↓
+
+formatearFecha(fecha: string): string {
+  if (!fecha) return '';
+
+  return new Date(fecha).toLocaleString('es-AR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
 }

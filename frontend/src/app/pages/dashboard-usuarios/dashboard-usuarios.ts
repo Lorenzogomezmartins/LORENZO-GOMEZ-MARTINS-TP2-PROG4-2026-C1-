@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'; // Permite usar directivas como *ngIf y *ngFor
 import { Component, OnInit } from '@angular/core'; // Component define el componente y OnInit ejecuta lógica al iniciar
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
   FormBuilder, // Facilita la creación de formularios reactivos
@@ -22,14 +23,16 @@ import { DeshabilitadoOpacoDirective } from '../../directives/deshabilitado-opac
   selector: 'app-dashboard-usuarios',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NombreCompletoPipe,
-    PerfilTextoPipe,
-    EstadoUsuarioPipe,
-    ResaltarAdminDirective,
-    DeshabilitadoOpacoDirective,
-  ],
+  CommonModule,
+  ReactiveFormsModule,
+  NombreCompletoPipe,
+  PerfilTextoPipe,
+  EstadoUsuarioPipe,
+  ResaltarAdminDirective,
+  DeshabilitadoOpacoDirective,
+  RouterLink,
+  RouterLinkActive,
+],
   templateUrl: './dashboard-usuarios.html',
   styleUrl: './dashboard-usuarios.scss',
 })
