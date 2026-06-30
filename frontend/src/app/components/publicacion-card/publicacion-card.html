@@ -45,16 +45,20 @@
     </span>
 
     <button
-      type="button"
-      class="btn-comentarios"
-      (click)="toggleComentarios()"
-    >
-      {{ mostrarComentarios ? 'Ocultar' : 'Ver' }}
-    </button>
+  *ngIf="publicacion.activa"
+  type="button"
+  class="btn-comentarios"
+  (click)="toggleComentarios()"
+>
+  {{ mostrarComentarios ? 'Ocultar' : 'Ver' }}
+</button>
 
-    <span class="contador-comentarios">
-      {{ comentarios.length || 0 }} 💬
-    </span>
+<span
+  *ngIf="publicacion.activa"
+  class="contador-comentarios"
+>
+  {{ comentarios.length || 0 }} 💬
+</span>
 
     <button
   [appAdminOnly]="usuarioActual"
@@ -67,7 +71,7 @@
 </button>
   </footer>
 
-  <section class="comentarios-card" *ngIf="mostrarComentarios">
+  <section class="comentarios-card" *ngIf="mostrarComentarios && publicacion.activa">
     <h4>💬 Comentarios</h4>
 
     <form
