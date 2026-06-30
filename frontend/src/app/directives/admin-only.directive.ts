@@ -1,32 +1,28 @@
 import {
-  Directive, // Permite crear directivas personalizadas
-  ElementRef, // Permite acceder al elemento HTML
-  OnInit, // Permite ejecutar código al iniciar la directiva
+  Directive,
+  ElementRef,
+  Input,
+  OnChanges,
+  Renderer2,
 } from '@angular/core';
 
-// Define una directiva personalizada
 @Directive({
-  selector: '[appAdminOnly]', // Se utiliza como atributo HTML
-  standalone: true, // Permite usarla sin declararla en un módulo
+  selector: '[appAdminOnly]',
+  standalone: true,
 })
-export class AdminOnlyDirective implements OnInit {
+export class AdminOnlyDirective implements OnChanges {
+  @Input('appAdminOnly') usuario: any;
 
-  // Permite acceder al elemento HTML donde se aplica la directiva
-  constructor(private el: ElementRef) {}
+  constructor(
+    private el: ElementRef,
+    private renderer: Renderer2,
+  ) {}
 
-  // Se ejecuta cuando la directiva se inicializa
-  ngOnInit(): void {
-
-    // Obtiene el usuario guardado en localStorage
-    const usuario = JSON.parse(
-      localStorage.getItem('usuario') || 'null',
-    );
-
-    // Si el usuario no es administrador
-    if (usuario?.perfil !== 'administrador') {
-
-      // Oculta completamente el elemento HTML
-      this.el.nativeElement.style.display = 'none';
+  ngOnChanges(): void {
+    if (this.usuario?.perfil === 'administrador') {
+      this.renderer.setStyle(this.el.nativeElement, 'display', '');
+    } else {
+      this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
     }
   }
 }

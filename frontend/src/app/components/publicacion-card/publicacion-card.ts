@@ -13,10 +13,11 @@ import {
 } from '@angular/forms';
 
 import { ComentariosService } from '../../services/comentarios';
+import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 
 @Component({
   selector: 'app-publicacion-card',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AdminOnlyDirective],
   templateUrl: './publicacion-card.html',
   styleUrl: './publicacion-card.scss',
 })
@@ -26,6 +27,7 @@ export class PublicacionCard {
 
   @Output() like = new EventEmitter<any>();
   @Output() eliminar = new EventEmitter<any>();
+  @Output() activar = new EventEmitter<any>();
 
   mostrarComentarios = false;
   comentarios: any[] = [];
@@ -93,6 +95,9 @@ export class PublicacionCard {
   clickEliminar() {
     this.eliminar.emit(this.publicacion);
   }
+  clickActivar() {
+  this.activar.emit(this.publicacion);
+}
 
   toggleComentarios() {
     this.mostrarComentarios = !this.mostrarComentarios;
