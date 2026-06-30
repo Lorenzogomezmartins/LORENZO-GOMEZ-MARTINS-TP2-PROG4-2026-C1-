@@ -131,64 +131,69 @@ export class DashboardEstadisticas implements AfterViewInit {
       });
   }
 
-  // Consulta al backend y grafica comentarios por día en un lapso.
+ // Consulta al backend y grafica comentarios por día en un rango de fechas.
 cargarComentariosTotal(): void {
   this.estadisticasService
-    .comentariosTotal(this.desde, this.hasta)
+    .comentariosTotal(this.desde, this.hasta) // Llama al service enviando desde y hasta.
     .subscribe({
-      next: (data: any) => {
-        this.chartComentariosTotal?.destroy();
+      next: (data: any) => { // Se ejecuta cuando la petición sale bien.
 
+        this.chartComentariosTotal?.destroy(); // Elimina el gráfico anterior.
+
+        // Verifica que la respuesta sea un arreglo.
         const comentariosPorDia: any[] = Array.isArray(data) ? data : [];
 
+        // Suma todos los comentarios para obtener el total.
         this.totalComentarios = comentariosPorDia.reduce(
           (total: number, item: any) => total + item.cantidad,
           0,
         );
 
+        // Verifica si no hay comentarios.
         this.sinDatosComentariosTotal = this.totalComentarios === 0;
 
         if (this.sinDatosComentariosTotal) {
-          return;
+          return; // Si no hay datos, no dibuja el gráfico.
         }
 
+        // Crea el gráfico.
         this.chartComentariosTotal = new Chart(
-          this.graficoComentariosTotal.nativeElement,
+          this.graficoComentariosTotal.nativeElement, // Canvas donde se dibuja.
           {
-            type: 'line',
+            type: 'line', // Gráfico de líneas.
             data: {
-              labels: comentariosPorDia.map((item: any) => item.fecha),
+              labels: comentariosPorDia.map((item: any) => item.fecha), // Fechas del eje X.
               datasets: [
                 {
-                  label: 'Comentarios por día',
-                  data: comentariosPorDia.map((item: any) => item.cantidad),
-                  borderWidth: 2,
-                  tension: 0,
-                  fill: false,
-                  pointRadius: 4,
-                  pointHoverRadius: 6,
+                  label: 'Comentarios por día', // Nombre del dataset.
+                  data: comentariosPorDia.map((item: any) => item.cantidad), // Cantidad de comentarios.
+                  borderWidth: 2, // Grosor de la línea.
+                  tension: 0, // Línea recta (sin curvas).
+                  fill: false, // No rellena debajo de la línea.
+                  pointRadius: 4, // Tamaño de los puntos.
+                  pointHoverRadius: 6, // Tamaño al pasar el mouse.
                 },
               ],
             },
             options: {
-              responsive: true,
-              maintainAspectRatio: false,
+              responsive: true, // Se adapta al tamaño de pantalla.
+              maintainAspectRatio: false, // Permite controlar el tamaño desde CSS.
               scales: {
                 x: {
                   title: {
-                    display: true,
+                    display: true, // Muestra el título del eje X.
                     text: 'Fecha',
                   },
                 },
                 y: {
-                  beginAtZero: true,
+                  beginAtZero: true, // Empieza desde 0.
                   title: {
-                    display: true,
+                    display: true, // Muestra el título del eje Y.
                     text: 'Cantidad de comentarios',
                   },
                   ticks: {
-                    precision: 0,
-                    stepSize: 1,
+                    precision: 0, // Solo números enteros.
+                    stepSize: 1, // Avanza de 1 en 1.
                   },
                 },
               },
@@ -196,12 +201,11 @@ cargarComentariosTotal(): void {
           },
         );
       },
-      error: () => {
+      error: () => { // Si falla la petición.
         this.error = 'No se pudieron cargar los comentarios por día.';
       },
     });
 }
-
   // Consulta al backend y grafica las publicaciones con más comentarios.
   cargarComentariosPorPublicacion(): void {
     this.estadisticasService
