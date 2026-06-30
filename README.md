@@ -145,7 +145,30 @@ La aplicación permite a los usuarios registrarse, iniciar sesión, administrar 
 
 # Sprint #4
 
-Pendiente.
+## Frontend
+
+- Eliminación de publicaciones por administradores.
+- Dashboard de Usuarios.
+- Alta y baja lógica de usuarios.
+- Dashboard de Estadísticas.
+- Gráficos con filtro por rango de fechas.
+- Implementación de PWA.
+- Creación de 3 Pipes.
+- Creación de 3 Directivas.
+- Interceptor para autenticación con JWT.
+
+## Backend
+
+- Implementación de JWT.
+- Creación de JwtAuthGuard y AdminGuard.
+- Protección de rutas para administradores.
+- Gestión de usuarios (listar, alta, baja y rehabilitación).
+- Validación de usuarios deshabilitados.
+- Implementación del módulo de Estadísticas.
+- Consultas para gráficos por rango de fechas.
+
+---
+```
 
 ---
 
