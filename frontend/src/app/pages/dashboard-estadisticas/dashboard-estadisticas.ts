@@ -169,17 +169,28 @@ cargarComentariosTotal(): void {
               ],
             },
             options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    precision: 0,
-                  },
-                },
-              },
-            },
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    x: {
+      title: {
+        display: true,
+        text: 'Fecha',
+      },
+    },
+    y: {
+      beginAtZero: true,
+      title: {
+        display: true,
+        text: 'Cantidad de comentarios',
+      },
+      ticks: {
+        precision: 0,
+        stepSize: 1,
+      },
+    },
+  },
+},
           },
         );
       },
