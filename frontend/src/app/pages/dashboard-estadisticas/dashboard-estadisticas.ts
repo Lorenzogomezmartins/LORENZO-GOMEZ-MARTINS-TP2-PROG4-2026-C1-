@@ -136,7 +136,7 @@ cargarComentariosTotal(): void {
   this.estadisticasService
     .comentariosTotal(this.desde, this.hasta)
     .subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.chartComentariosTotal?.destroy();
 
         const comentariosPorDia: any[] = Array.isArray(data) ? data : [];
@@ -163,34 +163,35 @@ cargarComentariosTotal(): void {
                   label: 'Comentarios por día',
                   data: comentariosPorDia.map((item: any) => item.cantidad),
                   borderWidth: 2,
-                  tension: 0.3,
+                  tension: 0,
+                  stepped: true,
                   fill: false,
                 },
               ],
             },
             options: {
-  responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    x: {
-      title: {
-        display: true,
-        text: 'Fecha',
-      },
-    },
-    y: {
-      beginAtZero: true,
-      title: {
-        display: true,
-        text: 'Cantidad de comentarios',
-      },
-      ticks: {
-        precision: 0,
-        stepSize: 1,
-      },
-    },
-  },
-},
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Fecha',
+                  },
+                },
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Cantidad de comentarios',
+                  },
+                  ticks: {
+                    precision: 0,
+                    stepSize: 1,
+                  },
+                },
+              },
+            },
           },
         );
       },
