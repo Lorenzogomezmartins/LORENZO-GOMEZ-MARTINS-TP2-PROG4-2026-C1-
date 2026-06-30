@@ -1,21 +1,28 @@
-import { CommonModule } from '@angular/common'; // Permite usar directivas como *ngIf y *ngFor
+import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
 import {
-  AfterViewInit, // Ciclo de vida que se ejecuta después de que la vista HTML ya cargó
-  Component, // Permite definir un componente Angular
-  ElementRef, // Permite acceder directamente a un elemento HTML
-  ViewChild, // Permite obtener referencias a elementos del HTML
+  AfterViewInit,
+  Component,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 
-import { FormsModule } from '@angular/forms'; // Permite usar ngModel en inputs
-import Chart from 'chart.js/auto'; // Librería para crear gráficos
+import { FormsModule } from '@angular/forms';
+import Chart from 'chart.js/auto';
 
-import { EstadisticasService } from '../../services/estadisticas.service'; // Servicio que consulta estadísticas al backend
+import { EstadisticasService } from '../../services/estadisticas.service';// Servicio que consulta estadísticas al backend
 
 // Componente del dashboard de estadísticas
 @Component({
   selector: 'app-dashboard-estadisticas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    RouterLinkActive,
+  ],
   templateUrl: './dashboard-estadisticas.html',
   styleUrl: './dashboard-estadisticas.scss',
 })

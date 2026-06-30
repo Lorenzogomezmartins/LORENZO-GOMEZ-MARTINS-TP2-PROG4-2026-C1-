@@ -11,9 +11,7 @@
         {{ publicacion.usuario?.apellido }}
       </h4>
 
-      <span>
-        @{{ publicacion.usuario?.nombreUsuario }}
-      </span>
+      <span>@{{ publicacion.usuario?.nombreUsuario }}</span>
 
       <div class="fecha-publicacion">
         {{ formatearFecha(publicacion.createdAt) }}
@@ -23,7 +21,7 @@
 
   <h3>{{ publicacion.titulo }}</h3>
 
-  <p>{{ publicacion.descripcion }}</p>
+  <p class="descripcion">{{ publicacion.descripcion }}</p>
 
   <img
     *ngIf="publicacion.imagen"
@@ -33,19 +31,30 @@
   />
 
   <footer>
-    <button type="button" (click)="clickLike()">
-      {{ usuarioDioLike() ? 'Quitar me gusta' : 'Me gusta' }}
+    <button
+      type="button"
+      class="btn-like"
+      [class.like-activo]="usuarioDioLike()"
+      (click)="clickLike()"
+    >
+      {{ usuarioDioLike() ? '💔 Quitar' : '❤️ Me gusta' }}
     </button>
 
-    <span>{{ publicacion.cantidadLikes || 0 }} me gusta</span>
+    <span class="contador-like">
+      {{ publicacion.cantidadLikes || 0 }} ❤️
+    </span>
 
     <button
       type="button"
-      class="btn-ver"
+      class="btn-comentarios"
       (click)="toggleComentarios()"
     >
-      {{ mostrarComentarios ? 'Ocultar comentarios' : 'Ver comentarios' }}
+      {{ mostrarComentarios ? 'Ocultar' : 'Ver' }}
     </button>
+
+    <span class="contador-comentarios">
+      {{ comentarios.length || 0 }} 💬
+    </span>
 
     <button
       *ngIf="puedeEliminar()"
@@ -53,21 +62,22 @@
       class="btn-eliminar"
       (click)="clickEliminar()"
     >
-      Eliminar
+      🗑️ Eliminar
     </button>
   </footer>
 
-  <section class="comentarios" *ngIf="mostrarComentarios">
+  <section class="comentarios-card" *ngIf="mostrarComentarios">
+    <h4>💬 Comentarios</h4>
+
     <form
       class="form-comentario"
       [formGroup]="comentarioForm"
       (ngSubmit)="crearComentario()"
     >
-      <input
-        type="text"
+      <textarea
         placeholder="Escribí un comentario..."
         formControlName="mensaje"
-      />
+      ></textarea>
 
       <button type="submit">
         Comentar
@@ -82,25 +92,38 @@
       class="sin-comentarios"
       *ngIf="comentarios.length === 0 && !errorComentarios"
     >
-      No hay comentarios.
+      Todavía no hay comentarios.
     </p>
 
-    <div
+    <article
       class="comentario"
       *ngFor="let comentario of comentarios"
     >
-      <strong>
-        {{ comentario.usuario?.nombre }}
-        {{ comentario.usuario?.apellido }}
-      </strong>
+      <div class="comentario-header">
+        <img
+          [src]="comentario.usuario?.imagenPerfil || 'assets/avatar-default.png'"
+          alt="Foto de perfil"
+        />
+
+        <div>
+          <strong>
+            {{ comentario.usuario?.nombre }}
+            {{ comentario.usuario?.apellido }}
+          </strong>
+
+          <span>
+            @{{ comentario.usuario?.nombreUsuario }} ·
+            {{ formatearFecha(comentario.createdAt) }}
+          </span>
+
+          <small *ngIf="comentario.modificado">
+            Editado
+          </small>
+        </div>
+      </div>
 
       <ng-container *ngIf="comentarioEditando?._id !== comentario._id">
         <p>{{ comentario.mensaje }}</p>
-
-        <small>
-          {{ formatearFecha(comentario.createdAt) }}
-          <span *ngIf="comentario.modificado"> - comentario editado</span>
-        </small>
 
         <button
           *ngIf="puedeEditar(comentario)"
@@ -118,22 +141,31 @@
         [formGroup]="editarForm"
         (ngSubmit)="guardarEdicion()"
       >
-        <input
-          type="text"
-          formControlName="mensaje"
-        />
+        <textarea formControlName="mensaje"></textarea>
 
-        <button type="submit">
-          Guardar
-        </button>
+        <div>
+          <button type="submit">
+            Guardar
+          </button>
 
-        <button
-          type="button"
-          (click)="cancelarEdicion()"
-        >
-          Cancelar
-        </button>
+          <button
+            type="button"
+            class="btn-secundario"
+            (click)="cancelarEdicion()"
+          >
+            Cancelar
+          </button>
+        </div>
       </form>
-    </div>
+    </article>
+
+    <button
+      type="button"
+      class="btn-cargar"
+      *ngIf="hayMasComentarios && comentarios.length > 0"
+      (click)="cargarComentarios()"
+    >
+      Cargar más comentarios
+    </button>
   </section>
 </article>

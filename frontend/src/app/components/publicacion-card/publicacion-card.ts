@@ -31,6 +31,10 @@ export class PublicacionCard {
   comentarios: any[] = [];
   errorComentarios = '';
 
+  offsetComentarios = 0;
+  limiteComentarios = 5;
+  hayMasComentarios = true;
+
   comentarioForm!: FormGroup;
   editarForm!: FormGroup;
   comentarioEditando: any = null;
@@ -94,18 +98,39 @@ export class PublicacionCard {
     this.mostrarComentarios = !this.mostrarComentarios;
 
     if (this.mostrarComentarios && this.comentarios.length === 0) {
+      this.reiniciarComentarios();
       this.cargarComentarios();
     }
+  }
+
+  reiniciarComentarios() {
+    this.comentarios = [];
+    this.offsetComentarios = 0;
+    this.hayMasComentarios = true;
   }
 
   cargarComentarios() {
     this.errorComentarios = '';
 
     this.comentariosService
-      .listarComentarios(this.publicacion._id, 0, 5)
+      .listarComentarios(
+        this.publicacion._id,
+        this.offsetComentarios,
+        this.limiteComentarios,
+      )
       .subscribe({
         next: (resp: any) => {
-          this.comentarios = resp.comentarios || [];
+          const nuevosComentarios = resp.comentarios || [];
+
+          this.comentarios = [
+            ...this.comentarios,
+            ...nuevosComentarios,
+          ];
+
+          this.offsetComentarios += this.limiteComentarios;
+
+          this.hayMasComentarios =
+            nuevosComentarios.length === this.limiteComentarios;
         },
         error: () => {
           this.errorComentarios = 'No se pudieron cargar los comentarios.';
@@ -130,7 +155,7 @@ export class PublicacionCard {
       .subscribe({
         next: () => {
           this.comentarioForm.reset();
-          this.comentarios = [];
+          this.reiniciarComentarios();
           this.cargarComentarios();
         },
         error: (err) => {
@@ -165,7 +190,7 @@ export class PublicacionCard {
         next: () => {
           this.comentarioEditando = null;
           this.editarForm.reset();
-          this.comentarios = [];
+          this.reiniciarComentarios();
           this.cargarComentarios();
         },
         error: (err) => {

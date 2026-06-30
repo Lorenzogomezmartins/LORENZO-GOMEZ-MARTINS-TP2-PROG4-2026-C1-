@@ -25,20 +25,12 @@
     </a>
 
     <a
-      *ngIf="esAdmin()"
-      routerLink="/dashboard/usuarios"
-      routerLinkActive="activo"
-    >
-      Usuarios
-    </a>
-
-    <a
-      *ngIf="esAdmin()"
-      routerLink="/dashboard/estadisticas"
-      routerLinkActive="activo"
-    >
-      Estadísticas
-    </a>
+  *ngIf="esAdmin()"
+  routerLink="/dashboard/usuarios"
+  routerLinkActive="activo"
+>
+  Dashboard
+</a>
 
     <a href="#" (click)="cerrarSesion(); $event.preventDefault()">
       Cerrar Sesión
