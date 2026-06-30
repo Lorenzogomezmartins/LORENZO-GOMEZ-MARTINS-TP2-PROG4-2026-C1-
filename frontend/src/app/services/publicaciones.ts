@@ -41,7 +41,13 @@ export class PublicacionesService {
       url += `&usuarioId=${usuarioId}`;
     }
 
-    return this.http.get(url);
+    const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+
+const headers = new HttpHeaders({
+  'usuario-perfil': usuario?.perfil || '',
+});
+
+return this.http.get(url, { headers });
   }
 
   // =====================================================
