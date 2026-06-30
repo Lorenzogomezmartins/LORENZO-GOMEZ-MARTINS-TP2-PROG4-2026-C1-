@@ -1,7 +1,7 @@
 <article class="card-publicacion">
   <header class="autor">
     <img
-      [src]="publicacion.usuario?.imagenPerfil || 'assets/avatar-default.png'"
+      [src]="obtenerImagenPerfil(publicacion.usuario?.imagenPerfil)"
       alt="Foto de perfil"
     />
 
@@ -26,7 +26,7 @@
   <img
     *ngIf="publicacion.imagen"
     class="imagen-publicacion"
-    [src]="publicacion.imagen"
+    [src]="obtenerImagenPublicacion(publicacion.imagen)"
     alt="Imagen de publicación"
   />
 
@@ -101,7 +101,7 @@
     >
       <div class="comentario-header">
         <img
-          [src]="comentario.usuario?.imagenPerfil || 'assets/avatar-default.png'"
+          [src]="obtenerImagenPerfil(comentario.usuario?.imagenPerfil)"
           alt="Foto de perfil"
         />
 

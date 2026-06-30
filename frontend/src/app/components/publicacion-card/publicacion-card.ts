@@ -199,4 +199,17 @@ export class PublicacionCard {
         },
       });
   }
+  obtenerImagenPublicacion(imagen: string): string {
+  if (!imagen) return 'assets/avatar-default.png';
+  if (imagen.startsWith('http')) return imagen;
+
+  return `https://redsocial-backend-fy2b.onrender.com/uploads/publicaciones/${imagen}`;
+}
+
+obtenerImagenPerfil(imagen: string): string {
+  if (!imagen) return 'assets/avatar-default.png';
+  if (imagen.startsWith('http')) return imagen;
+
+  return `https://redsocial-backend-fy2b.onrender.com/uploads/${imagen}`;
+}
 }
