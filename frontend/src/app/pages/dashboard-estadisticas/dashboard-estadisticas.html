@@ -44,8 +44,8 @@
     </article>
 
     <article class="grafico-card total-card">
-      <h2>Comentarios totales</h2>
-      <p>Total de comentarios realizados.</p>
+      <h2>Comentarios por día</h2>
+<p>Evolución de comentarios en el período.</p>
 
       <div class="numero-total">
         {{ totalComentarios }}
@@ -57,7 +57,7 @@
         No hay comentarios en este período.
       </p>
 
-      <div class="canvas-box dona" [class.oculto]="sinDatosComentariosTotal">
+      <div class="canvas-box" [class.oculto]="sinDatosComentariosTotal">
         <canvas #graficoComentariosTotal></canvas>
       </div>
     </article>
