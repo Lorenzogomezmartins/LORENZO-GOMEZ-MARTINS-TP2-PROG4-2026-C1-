@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core'; // Permite inyectar este servicio en
 export class UsuariosService {
 
   // URL base del módulo usuarios del backend
-  private apiUrl = 'http://localhost:3000/usuarios';
+  private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/usuarios';
 
   // Inyección de HttpClient
   constructor(private http: HttpClient) {}
