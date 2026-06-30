@@ -25,7 +25,7 @@ interface ComentariosPorPublicacion {
 export class EstadisticasService {
 
   // URL base del módulo estadísticas del backend
-  private apiUrl = 'http://localhost:3000/estadisticas';
+  private apiUrl = 'https://redsocial-backend-fy2b.onrender.com/estadisticas';
 
   // Inyección de HttpClient
   constructor(private http: HttpClient) {}
