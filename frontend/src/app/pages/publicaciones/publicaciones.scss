@@ -1,270 +1,110 @@
 .publicaciones-page {
   min-height: 100vh;
-  padding: 48px 16px;
-  background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(147, 197, 253, 0.18), transparent 30%),
-    linear-gradient(135deg, #f8fafc, #eff6ff);
+  background: #f3f4f6;
+  padding: 40px 16px;
 
   .contenedor {
-    max-width: 980px;
+    max-width: 850px;
     margin: auto;
   }
 
   h1 {
     text-align: center;
-    color: #0f172a;
-    margin-bottom: 38px;
-    font-size: 52px;
-    font-weight: 900;
-    letter-spacing: -2px;
-  }
-
-  h1::after {
-    content: '';
-    display: block;
-    width: 90px;
-    height: 5px;
-    margin: 14px auto 0;
-    background: linear-gradient(90deg, #2563eb, #60a5fa);
-    border-radius: 999px;
+    color: #111827;
+    margin-bottom: 24px;
   }
 
   .form-publicacion {
-    position: relative;
-    max-width: 820px;
-    margin: 0 auto 28px;
-    background: rgba(255, 255, 255, 0.96);
-    padding: 30px;
-    border-radius: 30px;
-    border: 1px solid rgba(191, 219, 254, 0.9);
-    box-shadow: 0 24px 55px rgba(15, 23, 42, 0.12);
-    overflow: hidden;
-  }
-
-  .form-publicacion::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 7px;
-    background: linear-gradient(90deg, #2563eb, #60a5fa, #93c5fd);
-  }
-
-  .form-publicacion h2 {
-    margin: 0 0 20px;
-    color: #111827;
-    font-size: 26px;
-    font-weight: 900;
-  }
-
-  .form-publicacion input,
-  .form-publicacion textarea {
-    width: 100%;
-    margin-bottom: 14px;
-    padding: 15px 16px;
-    background: #f8fafc;
-    border: 1px solid #cbd5e1;
-    border-radius: 16px;
-    font-size: 15px;
-    transition: 0.2s ease;
-  }
-
-  .form-publicacion textarea {
-    min-height: 130px;
-    resize: vertical;
-  }
-
-  .form-publicacion input:focus,
-  .form-publicacion textarea:focus {
-    outline: none;
     background: white;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-  }
+    padding: 22px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    margin-bottom: 24px;
 
-  .acciones-publicacion {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
+    h2 {
+      margin-top: 0;
+      color: #111827;
+    }
 
-  .acciones-publicacion input[type='file'] {
-    flex: 1;
-    background: #f8fafc;
-    border: 1px dashed #93c5fd;
-    cursor: pointer;
-  }
+    input,
+    textarea {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 15px;
+    }
 
-  .form-publicacion button {
-    border: none;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: white;
-    padding: 13px 30px;
-    border-radius: 999px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.28);
-    transition: 0.2s ease;
-  }
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
 
-  .form-publicacion button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 30px rgba(37, 99, 235, 0.32);
-  }
-
-  .mensaje,
-  .error {
-    max-width: 820px;
-    margin: 0 auto 18px;
-    padding: 13px 18px;
-    border-radius: 16px;
-    font-weight: 800;
-    text-align: center;
-  }
-
-  .mensaje {
-    color: #15803d;
-    background: #dcfce7;
-    border: 1px solid #bbf7d0;
-  }
-
-  .error {
-    color: #b91c1c;
-    background: #fee2e2;
-    border: 1px solid #fecaca;
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+    }
   }
 
   .filtros {
-    max-width: 820px;
-    margin: 0 auto 34px;
-    padding: 8px;
     display: flex;
     justify-content: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.75);
-    border: 1px solid #dbeafe;
-    border-radius: 999px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-  }
+    gap: 12px;
+    margin-bottom: 22px;
 
-  .filtros button {
-    flex: 1;
-    border: none;
-    background: transparent;
-    color: #475569;
-    padding: 13px 20px;
-    border-radius: 999px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.2s ease;
-  }
+    button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      background: #e5e7eb;
+      font-weight: 700;
+    }
 
-  .filtros button:hover {
-    background: #eff6ff;
-    color: #2563eb;
-  }
-
-  .filtros .activo {
-    background: #2563eb;
-    color: white;
-    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.25);
-  }
-
-  .lista-publicaciones {
-    max-width: 820px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .lista-publicaciones app-publicacion-card {
-    display: block;
-    background: rgba(255, 255, 255, 0.98);
-    border-radius: 28px;
-    border: 1px solid #dbeafe;
-    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
-    overflow: hidden;
-    transition: 0.2s ease;
-  }
-
-  .lista-publicaciones app-publicacion-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 26px 60px rgba(15, 23, 42, 0.14);
+    .activo {
+      background: #2563eb;
+      color: white;
+    }
   }
 
   .paginacion {
-    max-width: 820px;
-    margin: 40px auto 0;
-    padding: 16px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 18px;
-    background: white;
-    border: 1px solid #dbeafe;
-    border-radius: 24px;
-    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.08);
+    gap: 14px;
+    margin-top: 22px;
+
+    button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      background: #111827;
+      color: white;
+      font-weight: 700;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
-  .paginacion span {
-    font-weight: 800;
-    color: #374151;
+  .mensaje {
+    color: #16a34a;
+    font-weight: 700;
+    text-align: center;
   }
 
-  .paginacion button {
-    border: none;
-    background: #111827;
-    color: white;
-    padding: 11px 20px;
-    border-radius: 999px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.2s ease;
-  }
-
-  .paginacion button:hover:not(:disabled) {
-    background: #2563eb;
-    transform: translateY(-2px);
-  }
-
-  .paginacion button:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
-}
-
-@media (max-width: 768px) {
-  .publicaciones-page {
-    padding: 32px 14px;
-
-    h1 {
-      font-size: 40px;
-    }
-
-    .form-publicacion {
-      padding: 24px;
-    }
-
-    .acciones-publicacion {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .form-publicacion button {
-      width: 100%;
-    }
-
-    .filtros {
-      border-radius: 24px;
-      flex-direction: column;
-    }
-
-    .paginacion {
-      flex-direction: column;
-      gap: 12px;
-    }
+  .error {
+    color: #dc2626;
+    font-weight: 700;
+    text-align: center;
   }
 }

@@ -1,0 +1,16 @@
+{
+  "name": "Red Social",
+  "short_name": "RedSocial",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "favicon32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}

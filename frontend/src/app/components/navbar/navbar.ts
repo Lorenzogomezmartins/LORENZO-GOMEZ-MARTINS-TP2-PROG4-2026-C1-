@@ -12,20 +12,13 @@ import {
 } from '@angular/router';
 
 @Component({
-  // Etiqueta HTML que representa este componente.
   selector: 'app-navbar',
-
-  // Módulos y directivas utilizadas en el HTML.
   imports: [
     CommonModule,
     RouterLink,
     RouterLinkActive,
   ],
-
-  // Archivo HTML asociado.
   templateUrl: './navbar.html',
-
-  // Archivo de estilos asociado.
   styleUrl: './navbar.scss',
 })
 export class Navbar {
@@ -38,11 +31,23 @@ export class Navbar {
     return localStorage.getItem('usuario') !== null;
   }
 
+  // Verifica si el usuario actual es administrador.
+  esAdmin(): boolean {
+    const usuario = JSON.parse(
+      localStorage.getItem('usuario') || 'null',
+    );
+
+    return usuario?.perfil === 'administrador';
+  }
+
   // Cierra la sesión del usuario actual.
   cerrarSesion() {
 
     // Elimina la información del usuario almacenada localmente.
     localStorage.removeItem('usuario');
+
+    // Elimina el token.
+    localStorage.removeItem('token');
 
     // Redirige al login.
     this.router.navigate(['/login']);

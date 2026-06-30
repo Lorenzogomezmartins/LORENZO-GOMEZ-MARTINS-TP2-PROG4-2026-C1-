@@ -73,10 +73,8 @@ export class Login {
       .subscribe({
         // Si el login es correcto, guarda el usuario y navega a publicaciones.
         next: (resp: any) => {
-  this.authService.guardarSesion(resp.usuario, resp.token);
-
-  window.dispatchEvent(new Event('iniciar-contador-sesion'));
-
+  localStorage.setItem('token', resp.token);
+  this.authService.guardarUsuario(resp.usuario);
   this.router.navigate(['/publicaciones']);
 },
 

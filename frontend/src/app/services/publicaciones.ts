@@ -1,29 +1,42 @@
-// Servicio para realizar operaciones relacionadas con publicaciones.
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Permite realizar peticiones HTTP y configurar headers
+import { Injectable } from '@angular/core'; // Permite inyectar este servicio en cualquier componente
 
-// Permite que Angular pueda inyectar este servicio donde sea necesario.
-import { Injectable } from '@angular/core';
-
+// Hace que el servicio esté disponible en toda la aplicación
 @Injectable({
-  // Hace que el servicio esté disponible en toda la aplicación.
   providedIn: 'root',
 })
 export class PublicacionesService {
-  private apiUrl =
-    'https://redsocial-backend-fy2b.onrender.com/publicaciones';
 
-  // Inyección de HttpClient para realizar peticiones HTTP.
+  // URL base del módulo publicaciones del backend
+  private apiUrl = 'http://localhost:3000/publicaciones';
+
+  // Inyección de HttpClient
   constructor(private http: HttpClient) {}
 
-  // Obtiene publicaciones con paginación, ordenamiento y filtro opcional por usuario.
+  // =====================================================
+  // LISTAR PUBLICACIONES
+  // =====================================================
+
+  /*
+    GET /publicaciones
+
+    Permite:
+    - ordenar publicaciones
+    - paginar resultados
+    - filtrar por usuario
+  */
   listarPublicaciones(
     orden = 'fecha',
     offset = 0,
     limit = 5,
     usuarioId?: string,
   ) {
-    let url = `${this.apiUrl}?orden=${orden}&offset=${offset}&limit=${limit}`;
 
+    // Construye la URL con filtros y paginación
+    let url =
+      `${this.apiUrl}?orden=${orden}&offset=${offset}&limit=${limit}`;
+
+    // Si se envía usuarioId filtra publicaciones de ese usuario
     if (usuarioId) {
       url += `&usuarioId=${usuarioId}`;
     }
@@ -31,43 +44,108 @@ export class PublicacionesService {
     return this.http.get(url);
   }
 
-  // Obtiene una publicación por ID.
+  // =====================================================
+  // OBTENER PUBLICACIÓN POR ID
+  // =====================================================
+
+  /*
+    GET /publicaciones/:id
+  */
   obtenerPublicacionPorId(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+
+    return this.http.get(
+      `${this.apiUrl}/${id}`,
+    );
   }
 
-  // Crea una nueva publicación.
+  // =====================================================
+  // CREAR PUBLICACIÓN
+  // =====================================================
+
+  /*
+    POST /publicaciones
+
+    Utiliza FormData porque envía:
+    - texto
+    - imagen
+  */
   crearPublicacion(formData: FormData) {
-    return this.http.post(this.apiUrl, formData);
+
+    return this.http.post(
+      this.apiUrl,
+      formData,
+    );
   }
 
-  // Agrega un like a una publicación.
-  darLike(publicacionId: string, usuarioId: string) {
-    return this.http.post(`${this.apiUrl}/${publicacionId}/like`, {
-      usuarioId,
-    });
+  // =====================================================
+  // DAR LIKE
+  // =====================================================
+
+  /*
+    POST /publicaciones/:id/like
+  */
+  darLike(
+    publicacionId: string,
+    usuarioId: string,
+  ) {
+
+    return this.http.post(
+      `${this.apiUrl}/${publicacionId}/like`,
+      {
+        usuarioId,
+      },
+    );
   }
 
-  // Elimina un like de una publicación.
-  quitarLike(publicacionId: string, usuarioId: string) {
-    return this.http.delete(`${this.apiUrl}/${publicacionId}/like`, {
-      body: { usuarioId },
-    });
+  // =====================================================
+  // QUITAR LIKE
+  // =====================================================
+
+  /*
+    DELETE /publicaciones/:id/like
+  */
+  quitarLike(
+    publicacionId: string,
+    usuarioId: string,
+  ) {
+
+    return this.http.delete(
+      `${this.apiUrl}/${publicacionId}/like`,
+      {
+        body: {
+          usuarioId,
+        },
+      },
+    );
   }
 
-  // Elimina una publicación enviando los datos del usuario en los headers.
+  // =====================================================
+  // ELIMINAR PUBLICACIÓN
+  // =====================================================
+
+  /*
+    DELETE /publicaciones/:id
+
+    Envía datos del usuario por headers para
+    validar permisos en el backend.
+  */
   eliminarPublicacion(
     publicacionId: string,
     usuarioId: string,
     perfil: string,
   ) {
+
+    // Crea headers personalizados
     const headers = new HttpHeaders({
       'usuario-id': usuarioId,
       'usuario-perfil': perfil,
     });
 
-    return this.http.delete(`${this.apiUrl}/${publicacionId}`, {
-      headers,
-    });
+    return this.http.delete(
+      `${this.apiUrl}/${publicacionId}`,
+      {
+        headers,
+      },
+    );
   }
 }

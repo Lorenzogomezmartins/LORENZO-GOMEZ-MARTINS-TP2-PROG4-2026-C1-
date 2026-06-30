@@ -1,6 +1,5 @@
 <section class="publicaciones-page">
   <div class="contenedor">
-
     <h1>Publicaciones</h1>
 
     <form
@@ -21,34 +20,15 @@
         formControlName="descripcion"
       ></textarea>
 
-      <div class="acciones-publicacion">
-        <input
-          type="file"
-          (change)="seleccionarImagen($event)"
-        />
+      <input type="file" (change)="seleccionarImagen($event)" />
 
-        <button type="submit">
-          Publicar
-        </button>
-      </div>
+      <button type="submit">Publicar</button>
     </form>
 
-    <p
-      class="mensaje"
-      *ngIf="mensaje"
-    >
-      {{ mensaje }}
-    </p>
-
-    <p
-      class="error"
-      *ngIf="error"
-    >
-      {{ error }}
-    </p>
+    <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
 
     <div class="filtros">
-
       <button
         type="button"
         [class.activo]="orden === 'fecha'"
@@ -64,24 +44,17 @@
       >
         Más likes
       </button>
-
     </div>
 
-    <div class="lista-publicaciones">
-
-      <app-publicacion-card
-        *ngFor="let publicacion of publicaciones"
-        [publicacion]="publicacion"
-        [usuarioActual]="usuarioActual"
-        (like)="manejarLike($event)"
-        (eliminar)="eliminarPublicacion($event)"
-      >
-      </app-publicacion-card>
-
-    </div>
+    <app-publicacion-card
+      *ngFor="let publicacion of publicaciones"
+      [publicacion]="publicacion"
+      [usuarioActual]="usuarioActual"
+      (like)="manejarLike($event)"
+      (eliminar)="eliminarPublicacion($event)"
+    ></app-publicacion-card>
 
     <div class="paginacion">
-
       <button
         type="button"
         (click)="paginaAnterior()"
@@ -91,16 +64,13 @@
       </button>
 
       <span>
-        Mostrando
-        {{ offset + 1 }}
-        -
+        Mostrando {{ offset + 1 }} -
         {{
           offset + limit > total
             ? total
             : offset + limit
         }}
-        de
-        {{ total }}
+        de {{ total }}
       </span>
 
       <button
@@ -110,8 +80,6 @@
       >
         Siguiente
       </button>
-
     </div>
-
   </div>
 </section>

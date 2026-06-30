@@ -1,0 +1,68 @@
+<section class="dashboard-estadisticas">
+  <h1>Dashboard de estadísticas</h1>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <div class="filtros">
+    <div>
+      <label>Desde</label>
+      <input type="date" [(ngModel)]="desde" />
+    </div>
+
+    <div>
+      <label>Hasta</label>
+      <input type="date" [(ngModel)]="hasta" />
+    </div>
+
+    <button type="button" (click)="cargarEstadisticas()">
+      Aplicar filtros
+    </button>
+  </div>
+
+  <div class="graficos-grid">
+    <article class="grafico-card">
+      <h2>Publicaciones por usuario</h2>
+      <p>Usuarios con más publicaciones en el período.</p>
+
+      <p class="sin-datos" *ngIf="sinDatosPublicaciones">
+        No hay publicaciones en este período.
+      </p>
+
+      <div class="canvas-box" [class.oculto]="sinDatosPublicaciones">
+        <canvas #graficoPublicaciones></canvas>
+      </div>
+    </article>
+
+    <article class="grafico-card total-card">
+      <h2>Comentarios totales</h2>
+      <p>Total de comentarios realizados.</p>
+
+      <div class="numero-total">
+        {{ totalComentarios }}
+      </div>
+
+      <p class="subtexto">comentarios</p>
+
+      <p class="sin-datos" *ngIf="sinDatosComentariosTotal">
+        No hay comentarios en este período.
+      </p>
+
+      <div class="canvas-box dona" [class.oculto]="sinDatosComentariosTotal">
+        <canvas #graficoComentariosTotal></canvas>
+      </div>
+    </article>
+
+    <article class="grafico-card">
+      <h2>Top publicaciones comentadas</h2>
+      <p>Las 4 publicaciones con más comentarios.</p>
+
+      <p class="sin-datos" *ngIf="sinDatosComentariosPublicacion">
+        No hay comentarios por publicación.
+      </p>
+
+      <div class="canvas-box" [class.oculto]="sinDatosComentariosPublicacion">
+        <canvas #graficoComentariosPublicacion></canvas>
+      </div>
+    </article>
+  </div>
+</section>

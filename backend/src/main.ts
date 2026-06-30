@@ -53,4 +53,4 @@ app.enableCors({
 }
 
 // Ejecuta la inicialización de la aplicación
-void bootstrap();
+bootstrap();

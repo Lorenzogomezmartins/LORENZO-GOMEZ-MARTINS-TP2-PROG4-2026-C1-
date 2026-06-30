@@ -1,22 +1,32 @@
+// Tipos y configuraciones globales utilizadas por Angular.
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
+
+// Permite registrar las rutas de la aplicación.
 import { provideRouter } from '@angular/router';
-import {
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
 
+// Permite realizar peticiones HTTP desde Angular.
+import { provideHttpClient } from '@angular/common/http';
+
+// Importa las rutas definidas en app.routes.ts.
 import { routes } from './app.routes';
-import { authInterceptor } from './interceptors/auth-interceptor';
 
+// Configuración global de la aplicación.
 export const appConfig: ApplicationConfig = {
   providers: [
+    // Captura errores globales del navegador y de Angular.
     provideBrowserGlobalErrorListeners(),
+
+    // Configura la detección de cambios de Angular para optimizar rendimiento.
     provideZoneChangeDetection({ eventCoalescing: true }),
+
+    // Registra todas las rutas de la aplicación.
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+
+    // Habilita HttpClient para consumir APIs y servicios externos.
+    provideHttpClient(),
   ],
 };

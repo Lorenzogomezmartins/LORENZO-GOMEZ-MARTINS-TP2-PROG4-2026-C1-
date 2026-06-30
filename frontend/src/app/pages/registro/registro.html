@@ -1,20 +1,19 @@
+<!-- Contenedor principal de la página de registro. -->
 <section class="page">
+  <!-- Tarjeta visual donde se muestra el formulario. -->
   <div class="card">
     <h1>Crear cuenta</h1>
     <p class="subtitle">Registrate para entrar a la red social.</p>
 
+    <!-- Formulario reactivo conectado con registroForm y enviado con registrar(). -->
     <form [formGroup]="registroForm" (ngSubmit)="registrar()">
       <div class="grid">
         <label>
           Nombre
           <input type="text" formControlName="nombre" />
 
-          <span
-            *ngIf="
-              registroForm.get('nombre')?.touched &&
-              registroForm.get('nombre')?.invalid
-            "
-          >
+          <!-- Muestra error si el campo fue tocado y es inválido. -->
+          <span *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid">
             El nombre es obligatorio.
           </span>
         </label>
@@ -23,12 +22,8 @@
           Apellido
           <input type="text" formControlName="apellido" />
 
-          <span
-            *ngIf="
-              registroForm.get('apellido')?.touched &&
-              registroForm.get('apellido')?.invalid
-            "
-          >
+          <!-- Valida que el apellido sea obligatorio. -->
+          <span *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid">
             El apellido es obligatorio.
           </span>
         </label>
@@ -38,12 +33,8 @@
         Correo
         <input type="email" formControlName="correo" />
 
-        <span
-          *ngIf="
-            registroForm.get('correo')?.touched &&
-            registroForm.get('correo')?.invalid
-          "
-        >
+        <!-- Muestra error si el correo está vacío o tiene formato inválido. -->
+        <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid">
           Ingresá un correo válido.
         </span>
       </label>
@@ -52,12 +43,8 @@
         Nombre de usuario
         <input type="text" formControlName="nombreUsuario" />
 
-        <span
-          *ngIf="
-            registroForm.get('nombreUsuario')?.touched &&
-            registroForm.get('nombreUsuario')?.invalid
-          "
-        >
+        <!-- Valida que el nombre de usuario sea obligatorio. -->
+        <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.invalid">
           El nombre de usuario es obligatorio.
         </span>
       </label>
@@ -66,6 +53,7 @@
         Contraseña
         <input type="password" formControlName="password" />
 
+        <!-- Error cuando la contraseña está vacía. -->
         <span
           *ngIf="
             registroForm.get('password')?.touched &&
@@ -75,6 +63,7 @@
           La contraseña es obligatoria.
         </span>
 
+        <!-- Error cuando la contraseña tiene menos de 8 caracteres. -->
         <span
           *ngIf="
             registroForm.get('password')?.touched &&
@@ -84,6 +73,7 @@
           Debe tener al menos 8 caracteres.
         </span>
 
+        <!-- Error cuando la contraseña no contiene mayúscula. -->
         <span
           *ngIf="
             registroForm.get('password')?.touched &&
@@ -94,6 +84,7 @@
           Debe contener al menos una letra mayúscula.
         </span>
 
+        <!-- Error cuando la contraseña no contiene número. -->
         <span
           *ngIf="
             registroForm.get('password')?.touched &&
@@ -122,11 +113,8 @@
 
       <label>
         Imagen de perfil
-        <input
-          type="file"
-          accept="image/*"
-          (change)="seleccionarImagen($event)"
-        />
+        <!-- Al seleccionar una imagen, ejecuta seleccionarImagen($event). -->
+        <input type="file" accept="image/*" (change)="seleccionarImagen($event)" />
       </label>
 
       <label>
@@ -137,31 +125,14 @@
         </select>
       </label>
 
+      <!-- Mensaje de éxito del registro. -->
       <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+
+      <!-- Mensaje de error del registro. -->
       <p class="error" *ngIf="error">{{ error }}</p>
 
-      <button type="submit" [disabled]="cargando">
-        {{ cargando ? 'Registrando...' : 'Registrarme' }}
-      </button>
+      <!-- Envía el formulario. -->
+      <button type="submit">Registrarme</button>
     </form>
   </div>
-
- <div class="modal-fondo" *ngIf="cargando">
-  <div class="modal">
-    <div class="spinner"></div>
-    <h2>Registrando usuario...</h2>
-    <p>Por favor esperá un momento.</p>
-  </div>
-</div>
-
-<div class="modal-fondo" *ngIf="modalVisible">
-  <div class="modal">
-    <h2>{{ modalTitulo }}</h2>
-    <p>{{ modalMensaje }}</p>
-
-    <button type="button" (click)="cerrarModal()">
-      Ir al login
-    </button>
-  </div>
-</div>
 </section>
