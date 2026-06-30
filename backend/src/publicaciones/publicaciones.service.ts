@@ -92,7 +92,7 @@ export class PublicacionesService {
   }
 
   // Lista publicaciones activas con orden, paginación y filtro opcional por usuario
-  async listarPublicaciones(
+ async listarPublicaciones(
   orden: string = 'fecha',
   offset: number = 0,
   limit: number = 5,
@@ -100,10 +100,6 @@ export class PublicacionesService {
   perfil?: string,
 ) {
   const filtro: FiltroPublicaciones = {};
-
-  if (perfil !== 'administrador') {
-    filtro.activa = true;
-  }
 
     // Si se envía usuarioId, filtra publicaciones de ese usuario
     if (usuarioId) {
